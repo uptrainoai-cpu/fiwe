@@ -3,834 +3,739 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fiwe 15-Day Launch Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<title>Fiwe Content Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0f0f13;
-    --surface: #18181f;
-    --surface2: #1f1f2a;
-    --border: #2a2a38;
-    --accent: #7c5cfc;
-    --accent2: #ff5e78;
-    --accent3: #00e5a0;
-    --accent4: #ffc94a;
-    --text: #f0f0f8;
-    --muted: #7070a0;
-    --radius: 16px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; min-height: 100vh; }
-  
-  /* NAV */
-  nav { background: rgba(15,15,19,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; padding: 14px 32px; display: flex; align-items: center; justify-content: space-between; }
-  .logo { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
-  .logo span { color: var(--accent2); }
-  nav .nav-actions { display: flex; gap: 10px; align-items: center; }
-  .btn { padding: 9px 20px; border-radius: 10px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; transition: all 0.18s; }
-  .btn-accent { background: var(--accent); color: #fff; }
-  .btn-accent:hover { background: #6a4aee; transform: translateY(-1px); }
-  .btn-ghost { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-  .search-bar { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 9px 16px 9px 38px; border-radius: 10px; font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; width: 240px; outline: none; }
-  .search-bar:focus { border-color: var(--accent); }
-  .search-wrap { position: relative; }
-  .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); width: 16px; }
+:root{
+  --bg:#F5F4EF;
+  --surface:#FFFFFF;
+  --s2:#EEEDE6;
+  --s3:#E6E4DB;
+  --border:#DDD9CE;
+  --border2:#C8C4B8;
+  --text:#1A1916;
+  --muted:#888070;
+  --accent:#C94C18;
+  --a-bg:#FDF0EB;
+  --a-hover:#A83C10;
+  --green:#1E7A52;
+  --g-bg:#EAF7F1;
+  --yellow:#8A6200;
+  --y-bg:#FFF8E0;
+  --blue:#1A5CA0;
+  --b-bg:#EAF2FC;
+  --red:#B82020;
+  --r-bg:#FDEBEB;
+  --r:10px;
+  --shadow:0 1px 3px rgba(0,0,0,0.06),0 4px 14px rgba(0,0,0,0.05);
+  --font:'DM Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.5;min-height:100vh}
+h1,h2,h3,.serif{font-family:'Instrument Serif',Georgia,serif;font-weight:400;letter-spacing:-0.2px}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
-  /* MAIN */
-  main { max-width: 1280px; margin: 0 auto; padding: 40px 24px; display: flex; flex-direction: column; gap: 48px; }
+/* ── NAV ─── */
+nav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;gap:12px}
+.logo{font-family:'Instrument Serif',serif;font-size:1.3rem;color:var(--text);display:flex;align-items:center;gap:7px;white-space:nowrap}
+.logo-dot{width:8px;height:8px;background:var(--accent);border-radius:50%}
+.nav-r{display:flex;align-items:center;gap:8px}
+.search-wrap{position:relative}
+.search-ico{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--muted);width:14px;pointer-events:none}
+.search-input{background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:13px;padding:7px 12px 7px 30px;border-radius:8px;outline:none;width:190px;transition:border-color .15s,background .15s}
+.search-input:focus{border-color:var(--accent);background:var(--surface)}
 
-  /* HERO */
-  .hero { background: linear-gradient(135deg, var(--surface) 0%, #1a1030 100%); border: 1px solid var(--border); border-radius: 24px; padding: 56px 48px; text-align: center; position: relative; overflow: hidden; }
-  .hero::before { content: ''; position: absolute; top: -80px; right: -80px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(124,92,252,0.18) 0%, transparent 70%); border-radius: 50%; }
-  .hero::after { content: ''; position: absolute; bottom: -60px; left: -60px; width: 250px; height: 250px; background: radial-gradient(circle, rgba(0,229,160,0.12) 0%, transparent 70%); border-radius: 50%; }
-  .hero-badge { display: inline-block; background: rgba(124,92,252,0.18); color: var(--accent); font-size: 0.78rem; font-weight: 700; padding: 6px 16px; border-radius: 100px; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 20px; border: 1px solid rgba(124,92,252,0.3); }
-  .hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 800; line-height: 1.1; margin-bottom: 18px; }
-  .hero h1 span { color: var(--accent); }
-  .hero p { color: var(--muted); font-size: 1.05rem; max-width: 580px; margin: 0 auto 32px; line-height: 1.7; }
-  .hero-actions { display: flex; gap: 12px; justify-content: center; }
+/* ── BUTTONS ─── */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;border:none;font-family:var(--font);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap;line-height:1.3}
+.btn-sm{padding:5px 11px;font-size:12px}
+.btn-xs{padding:4px 9px;font-size:11px}
+.btn-p{background:var(--accent);color:#fff}
+.btn-p:hover{background:var(--a-hover)}
+.btn-o{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-o:hover{background:var(--s2);border-color:var(--border2)}
+.btn-ghost{background:none;border:none;cursor:pointer;font-family:var(--font);font-size:12px;color:var(--muted);padding:4px 8px;border-radius:6px}
+.btn-ghost:hover{background:var(--s2);color:var(--red)}
+.btn-del{background:none;border:none;cursor:pointer;font-family:var(--font);font-size:12px;color:var(--muted);padding:3px 8px;border-radius:6px;transition:all .15s}
+.btn-del:hover{background:var(--r-bg);color:var(--red)}
 
-  /* SECTION HEADINGS */
-  .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
-  .section-head h2 { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; }
-  .section-tag { font-size: 0.7rem; font-weight: 700; padding: 4px 12px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.06em; }
-  .tag-purple { background: rgba(124,92,252,0.15); color: var(--accent); border: 1px solid rgba(124,92,252,0.25); }
-  .tag-red { background: rgba(255,94,120,0.15); color: var(--accent2); border: 1px solid rgba(255,94,120,0.25); }
-  .tag-green { background: rgba(0,229,160,0.15); color: var(--accent3); border: 1px solid rgba(0,229,160,0.25); }
-  .tag-yellow { background: rgba(255,201,74,0.15); color: var(--accent4); border: 1px solid rgba(255,201,74,0.25); }
+/* ── LAYOUT ─── */
+main{max-width:1180px;margin:0 auto;padding:24px 16px;display:flex;flex-direction:column;gap:24px}
 
-  /* CARD */
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; }
+/* ── CARD ─── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.card-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.card-title{font-family:'Instrument Serif',serif;font-size:1.2rem;display:flex;align-items:center;gap:8px}
+.card-body{padding:18px 20px}
 
-  /* DASHBOARD GRID */
-  .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-  .dash-stat { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; cursor: pointer; transition: border-color 0.2s; position: relative; overflow: hidden; }
-  .dash-stat:hover { border-color: var(--accent); }
-  .dash-stat .stat-glow { position: absolute; top: 0; right: 0; width: 80px; height: 80px; border-radius: 50%; filter: blur(30px); opacity: 0.3; }
-  .dash-stat .stat-num { font-family: 'Syne', sans-serif; font-size: 2.8rem; font-weight: 800; line-height: 1; margin-bottom: 6px; }
-  .dash-stat .stat-label { color: var(--muted); font-size: 0.82rem; font-weight: 500; }
-  .dash-stat .stat-sub { font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
-  .dash-stat .stat-bar { height: 4px; background: var(--border); border-radius: 4px; margin-top: 14px; overflow: hidden; }
-  .dash-stat .stat-bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+/* ── PILLS ─── */
+.pill{display:inline-flex;align-items:center;padding:3px 8px;border-radius:100px;font-size:11px;font-weight:600;white-space:nowrap}
+.p-gray{background:var(--s2);color:var(--muted)}
+.p-orange{background:var(--a-bg);color:var(--accent)}
+.p-green{background:var(--g-bg);color:var(--green)}
+.p-yellow{background:var(--y-bg);color:var(--yellow)}
+.p-blue{background:var(--b-bg);color:var(--blue)}
 
-  /* PROGRESS BAR */
-  .prog-wrap { background: var(--surface2); border-radius: 100px; height: 22px; position: relative; overflow: hidden; border: 1px solid var(--border); }
-  .prog-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.5s ease; }
-  .prog-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; color: white; }
+/* ── STAT STRIP ─── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.stat .s-num{font-family:'Instrument Serif',serif;font-size:1.9rem;line-height:1.1;margin-bottom:3px}
+.stat .s-lbl{font-size:11px;font-weight:500;color:var(--muted)}
+.stat .s-bar{height:3px;background:var(--border);border-radius:2px;margin-top:8px;overflow:hidden}
+.stat .s-fill{height:100%;border-radius:2px;transition:width .4s ease}
+.s-a .s-fill{background:var(--accent)}
+.s-g .s-fill{background:var(--green)}
+.s-b .s-fill{background:var(--blue)}
+.s-y .s-fill{background:var(--yellow)}
 
-  /* TABLE */
-  .table-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.85rem; }
-  thead th { background: var(--surface2); color: var(--muted); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; padding: 12px 16px; border-bottom: 1px solid var(--border); white-space: nowrap; }
-  thead th:first-child { border-radius: 10px 0 0 10px; }
-  thead th:last-child { border-radius: 0 10px 10px 0; }
-  tbody tr { transition: background 0.15s; }
-  tbody tr:hover td { background: rgba(124,92,252,0.06); }
-  tbody td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-  tbody tr:last-child td { border-bottom: none; }
-  .table-input { background: transparent; border: none; color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; width: 100%; outline: none; }
-  .table-input:focus { background: var(--surface2); border-radius: 6px; padding: 2px 6px; }
-  select.table-sel { background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 0.78rem; padding: 5px 10px; border-radius: 8px; cursor: pointer; outline: none; }
-  select.table-sel:focus { border-color: var(--accent); }
-  .status-pill { display: inline-block; padding: 4px 10px; border-radius: 100px; font-size: 0.7rem; font-weight: 700; }
-  .sp-planned { background: rgba(112,112,160,0.18); color: var(--muted); }
-  .sp-progress { background: rgba(255,201,74,0.18); color: var(--accent4); }
-  .sp-complete { background: rgba(0,229,160,0.18); color: var(--accent3); }
-  .sp-published { background: rgba(124,92,252,0.18); color: var(--accent); }
-  .day-badge { display: inline-block; background: var(--accent); color: white; border-radius: 8px; padding: 3px 10px; font-size: 0.75rem; font-weight: 700; }
-  .day-badge.w2 { background: var(--accent3); color: #0f0f13; }
+/* ── ACCOUNTS ─── */
+.acc-list{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.acc-tag{display:inline-flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:13px}
+.acc-tag button{background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px;line-height:1;padding:0 2px}
+.acc-tag button:hover{color:var(--red)}
+.acc-add-row{display:flex;gap:8px;align-items:center}
+.acc-add-row input{background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:13px;padding:7px 12px;border-radius:8px;outline:none;width:210px;transition:border-color .15s}
+.acc-add-row input:focus{border-color:var(--accent);background:var(--surface)}
 
-  /* CHECKBOX */
-  .check-wrap { display: flex; align-items: center; justify-content: center; }
-  input[type=checkbox].big-check { width: 20px; height: 20px; accent-color: var(--accent); cursor: pointer; border-radius: 5px; }
+/* ── CALENDAR ─── */
+.cal-filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.f-sel{background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:12px;padding:6px 10px;border-radius:8px;outline:none;cursor:pointer}
+.f-sel:focus{border-color:var(--accent)}
 
-  /* FILTERS */
-  .filter-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .filter-sel { background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 0.82rem; padding: 8px 14px; border-radius: 10px; outline: none; cursor: pointer; }
-  .filter-sel:focus { border-color: var(--accent); }
+.prog-wrap{margin:12px 20px 0;padding-bottom:2px}
+.prog-info{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-weight:500;margin-bottom:5px}
+.prog-bar{background:var(--border);border-radius:100px;height:4px;overflow:hidden}
+.prog-fill{height:100%;border-radius:100px;background:var(--accent);transition:width .4s ease}
 
-  /* INFLUENCER TABLE */
-  .inf-link { color: var(--accent); text-decoration: none; font-size: 0.82rem; }
-  .inf-link:hover { text-decoration: underline; }
+/* Table column header */
+.cal-cols{display:grid;grid-template-columns:116px 128px 80px 100px 1fr 96px 30px;padding:8px 10px 8px 0;margin:8px 20px 4px;border-bottom:1px solid var(--border)}
+.col-h{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;padding:0 8px}
 
-  /* STICKY NOTES */
-  .sticky-board { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
-  .sticky { border-radius: 14px; padding: 18px; position: relative; min-height: 160px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 24px rgba(0,0,0,0.3); transition: transform 0.18s, box-shadow 0.18s; }
-  .sticky:hover { transform: translateY(-4px) rotate(0.5deg); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
-  .sticky.color-yellow { background: #2d2a14; border: 1px solid #5a5010; }
-  .sticky.color-purple { background: #1d1630; border: 1px solid #3d2a70; }
-  .sticky.color-green { background: #102a20; border: 1px solid #1a5a40; }
-  .sticky.color-red { background: #2a1018; border: 1px solid #5a1a2a; }
-  .sticky.color-blue { background: #101828; border: 1px solid #1a3858; }
-  .sticky .sticky-date { font-size: 0.68rem; font-weight: 700; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.07em; }
-  .sticky textarea { background: transparent; border: none; color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 0.88rem; line-height: 1.6; resize: none; flex: 1; outline: none; width: 100%; }
-  .sticky .sticky-actions { display: flex; justify-content: space-between; align-items: center; }
-  .sticky .del-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; transition: color 0.15s; }
-  .sticky .del-btn:hover { color: var(--accent2); }
-  .sticky .pin-dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,255,255,0.25); box-shadow: 0 2px 8px rgba(0,0,0,0.4); position: absolute; top: -7px; left: 50%; transform: translateX(-50%); }
-  .add-sticky-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 20px; }
-  .color-dot { width: 26px; height: 26px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: border-color 0.15s, transform 0.15s; }
-  .color-dot:hover, .color-dot.selected { border-color: white; transform: scale(1.2); }
-  .color-dot.yellow { background: #b8a020; }
-  .color-dot.purple { background: #7c5cfc; }
-  .color-dot.green { background: #00a070; }
-  .color-dot.red { background: #d04050; }
-  .color-dot.blue { background: #2060c0; }
-  .sticky-input { background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 0.88rem; padding: 10px 16px; border-radius: 10px; flex: 1; min-width: 180px; outline: none; }
-  .sticky-input:focus { border-color: var(--accent); }
+/* Entry */
+.cal-entries{display:flex;flex-direction:column;gap:3px;padding:0 20px 18px}
+.entry{border:1px solid var(--border);border-radius:10px;background:var(--surface);transition:border-color .15s}
+.entry:hover{border-color:var(--border2)}
+.entry.is-done{opacity:.52}
 
-  /* CAROUSELS */
-  .carousel-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
-  .carousel-card input[type=text] { background: transparent; border: none; color: var(--text); font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.95rem; width: 100%; outline: none; }
-  .carousel-card input[type=text]:focus { background: var(--surface); border-radius: 6px; padding: 2px 6px; }
-  .carousel-card input[type=number] { background: transparent; border: none; color: var(--accent3); font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.1rem; width: 56px; outline: none; }
-  .metric-row { display: flex; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
-  .metric-mini { background: var(--surface); border-radius: 8px; padding: 8px 12px; font-size: 0.78rem; color: var(--muted); flex: 1; }
-  .metric-mini span { font-weight: 700; color: var(--text); font-size: 1rem; display: block; }
+/* Main compact row */
+.e-row{display:grid;grid-template-columns:116px 128px 80px 100px 1fr 96px 30px;align-items:center}
+.ec{padding:8px;border-right:1px solid var(--border)}
+.ec:last-child{border-right:none;display:flex;align-items:center;justify-content:center}
+.ec input[type=date],.ec input[type=text]{background:transparent;border:none;color:var(--text);font-family:var(--font);font-size:13px;width:100%;outline:none}
+.ec input[type=date]:focus,.ec input[type=text]:focus{background:var(--a-bg);border-radius:4px;padding:1px 4px}
+.ec select{background:transparent;border:none;color:var(--text);font-family:var(--font);font-size:12px;width:100%;outline:none;cursor:pointer}
+.ec select:focus{background:var(--a-bg);border-radius:4px}
+.ec.hook-c{min-width:0}
+.ec.hook-c input{min-width:0}
+.chk{width:17px;height:17px;accent-color:var(--accent);cursor:pointer}
 
-  /* RESOURCES */
-  .resource-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-  .resource-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 12px; text-align: center; text-decoration: none; color: var(--text); transition: border-color 0.18s, background 0.18s; }
-  .resource-card:hover { border-color: var(--accent); background: rgba(124,92,252,0.08); }
-  .resource-card .r-icon { font-size: 2rem; margin-bottom: 8px; }
-  .resource-card .r-label { font-size: 0.75rem; font-weight: 600; }
+/* Script expand */
+.e-expander{width:100%;padding:5px 10px;font-size:11px;color:var(--muted);background:var(--s2);border:none;border-top:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:var(--font);transition:background .15s}
+.e-expander:hover{background:var(--a-bg);color:var(--accent)}
+.e-expander .arr{transition:transform .2s;display:inline-block}
+.e-expander.open .arr{transform:rotate(180deg)}
 
-  /* MODAL */
-  .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
-  .modal-bg.open { display: flex; }
-  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px; width: 100%; max-width: 480px; }
-  .modal h3 { font-family: 'Syne', sans-serif; font-size: 1.4rem; margin-bottom: 20px; }
-  .form-group { margin-bottom: 14px; }
-  .form-label { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; display: block; margin-bottom: 6px; }
-  .form-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; padding: 10px 14px; border-radius: 10px; outline: none; }
-  .form-input:focus { border-color: var(--accent); }
-  .form-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+.script-panel{display:none;flex-direction:column;gap:10px;padding:14px;border-top:1px solid var(--border);background:var(--s2)}
+.script-panel.open{display:flex}
+.sp-lbl{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.sp-ta{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:13px;padding:10px 12px;border-radius:8px;resize:vertical;min-height:80px;outline:none;line-height:1.6}
+.sp-ta:focus{border-color:var(--accent)}
+.sp-link-row{display:flex;gap:8px;align-items:center}
+.sp-link-input{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:13px;padding:7px 12px;border-radius:8px;outline:none}
+.sp-link-input:focus{border-color:var(--accent)}
+.sp-foot{display:flex;justify-content:flex-end}
 
-  /* TOAST */
-  #toast { position: fixed; bottom: 24px; right: 24px; background: var(--accent); color: white; padding: 12px 22px; border-radius: 12px; font-size: 0.88rem; font-weight: 600; z-index: 300; opacity: 0; transform: translateY(10px); transition: all 0.3s; pointer-events: none; }
-  #toast.show { opacity: 1; transform: translateY(0); }
+/* Mobile: stacked entry */
+@media(max-width:680px){
+  .cal-cols{display:none}
+  .e-row{grid-template-columns:1fr 1fr;gap:0}
+  .ec{border-right:none;border-bottom:1px solid var(--border);padding:8px 10px}
+  .ec:nth-child(2n-1){border-right:1px solid var(--border)}
+  .ec.hook-c{grid-column:1/-1;border-right:none}
+  .ec:last-child{grid-column:1/-1;border-right:none;border-bottom:none;justify-content:center;padding:8px}
+  .search-input{width:140px}
+}
 
-  /* FOOTER */
-  footer { text-align: center; padding: 32px 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.82rem; }
-  footer .footer-actions { display: flex; gap: 12px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
+/* ── INF TABLE ─── */
+.t-scroll{overflow-x:auto}
+table.inf-t{width:100%;border-collapse:collapse;font-size:13px}
+.inf-t thead th{background:var(--s2);color:var(--muted);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;padding:9px 11px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+.inf-t tbody tr{border-bottom:1px solid var(--border);transition:background .12s}
+.inf-t tbody tr:last-child{border-bottom:none}
+.inf-t tbody tr:hover{background:var(--s2)}
+.inf-t td{padding:8px 11px;vertical-align:middle}
+.t-inp{background:transparent;border:none;font-family:var(--font);font-size:13px;color:var(--text);width:100%;outline:none;min-width:55px}
+.t-inp:focus{background:var(--a-bg);border-radius:4px;padding:1px 5px}
+.t-sel{background:transparent;border:none;font-family:var(--font);font-size:12px;color:var(--text);outline:none;cursor:pointer}
+.t-sel:focus{background:var(--s2);border-radius:4px}
 
-  /* DONE STRIKETHROUGH */
-  tr.done-row td { opacity: 0.5; }
-  
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: var(--surface); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+/* ── CAROUSELS ─── */
+.car-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.car-item{border:1px solid var(--border);border-radius:10px;padding:14px;background:var(--s2);transition:border-color .15s}
+.car-item:hover{border-color:var(--border2)}
+.car-item .car-title{background:transparent;border:none;color:var(--text);font-family:var(--font);font-weight:600;font-size:14px;width:100%;outline:none;margin-bottom:8px}
+.car-item .car-title:focus{background:var(--surface);border-radius:4px;padding:2px 5px}
+.car-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.car-link-inp{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--accent);font-family:var(--font);font-size:12px;padding:6px 10px;border-radius:7px;outline:none;margin-top:8px}
+.car-link-inp:focus{border-color:var(--accent)}
+.m-pair{display:flex;gap:7px;margin-top:8px}
+.m-box{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:6px 9px;flex:1;font-size:11px}
+.m-box label{color:var(--muted);display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.m-box input{background:transparent;border:none;font-family:var(--font);font-weight:600;font-size:13px;color:var(--text);width:100%;outline:none}
 
-  @media (max-width: 640px) {
-    nav { padding: 12px 16px; }
-    .hero { padding: 36px 20px; }
-    main { padding: 24px 14px; }
-  }
+/* ── STICKY ─── */
+.sticky-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.sticky-inp{flex:1;min-width:160px;background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:13px;padding:8px 12px;border-radius:8px;outline:none;transition:border-color .15s}
+.sticky-inp:focus{border-color:var(--accent);background:var(--surface)}
+.swatches{display:flex;gap:5px;align-items:center}
+.sw{width:20px;height:20px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s}
+.sw:hover,.sw.on{border-color:var(--text);transform:scale(1.18)}
+.sw-y{background:#C49A10}
+.sw-g{background:#1E7A52}
+.sw-b{background:#1A5CA0}
+.sw-r{background:#B82020}
+.sw-p{background:#7248C8}
+
+.notes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:12px}
+.note{border-radius:10px;padding:13px;min-height:120px;display:flex;flex-direction:column;gap:5px;box-shadow:0 2px 8px rgba(0,0,0,0.07);transition:transform .15s,box-shadow .15s}
+.note:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,0.11)}
+.note.n-y{background:#FFFCE8;border:1px solid #E8C840}
+.note.n-g{background:#ECFAF3;border:1px solid #70C498}
+.note.n-b{background:#EAF2FC;border:1px solid #70A4D8}
+.note.n-r{background:#FEF0F0;border:1px solid #D88888}
+.note.n-p{background:#F4F0FE;border:1px solid #A888D8}
+.note-d{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.note textarea{flex:1;background:transparent;border:none;resize:none;font-family:var(--font);font-size:13px;color:var(--text);outline:none;line-height:1.6}
+.note-foot{display:flex;justify-content:flex-end}
+.note-del{background:none;border:none;cursor:pointer;color:var(--muted);font-size:11px;padding:2px 6px;border-radius:4px}
+.note-del:hover{background:rgba(0,0,0,0.07);color:var(--red)}
+
+/* ── MODAL ─── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:200;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:26px;width:100%;max-width:430px;box-shadow:0 8px 40px rgba(0,0,0,0.14)}
+.modal h3{font-family:'Instrument Serif',serif;font-size:1.2rem;margin-bottom:18px}
+.mf{margin-bottom:12px}
+.mf label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:5px}
+.mf input,.mf select{width:100%;background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:13px;padding:8px 12px;border-radius:8px;outline:none;transition:border-color .15s}
+.mf input:focus,.mf select:focus{border-color:var(--accent);background:var(--surface)}
+.m2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.m-acts{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+
+/* ── TOAST ─── */
+#toast{position:fixed;bottom:18px;right:18px;background:var(--text);color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:500;z-index:999;opacity:0;transform:translateY(6px);transition:all .25s;pointer-events:none}
+#toast.on{opacity:1;transform:translateY(0)}
+
+/* ── EMPTY STATE ─── */
+.empty{text-align:center;padding:28px;color:var(--muted);font-size:13px}
+
+/* two-col layout */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:720px){.two-col{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
-  <div class="logo">Fiwe<span>.</span>Tracker</div>
-  <div class="nav-actions">
+  <div class="logo"><span class="logo-dot"></span>Fiwe Tracker</div>
+  <div class="nav-r">
     <div class="search-wrap">
-      <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-      <input id="globalSearch" class="search-bar" placeholder="Search topics, influencers...">
+      <svg class="search-ico" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <input id="gSearch" class="search-input" placeholder="Search…">
     </div>
-    <button class="btn btn-ghost" onclick="openQuickAdd()">+ Quick Add</button>
+    <button class="btn btn-p btn-sm" onclick="openModal()">+ Add Entry</button>
   </div>
 </nav>
 
-<!-- MAIN -->
 <main>
 
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-badge">Content Marketing Command Center</div>
-    <h1>Fiwe 15-Day Launch Plan:<br><span>Your Complete Tracker</span></h1>
-    <p>Battle-tested 15-day content calendar. Launch Fiwe from 0 → 3,500 users using organic strategies & micro-influencer partnerships.</p>
-    <div class="hero-actions">
-      <a href="#calendar" class="btn btn-accent">📅 View Calendar</a>
-      <button class="btn btn-ghost" onclick="exportData()">📤 Export Data</button>
+  <!-- STATS -->
+  <div class="stats-grid" id="statsGrid"></div>
+
+  <!-- ACCOUNTS -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">📱 Instagram Accounts</div>
+      <span style="font-size:12px;color:var(--muted)">These appear as options in the calendar dropdown</span>
+    </div>
+    <div class="card-body">
+      <div class="acc-list" id="accList"></div>
+      <div class="acc-add-row">
+        <input id="accInput" placeholder="@your.instagram.id">
+        <button class="btn btn-o btn-sm" onclick="addAcc()">+ Add Account</button>
+      </div>
     </div>
   </div>
-
-  <!-- DASHBOARD -->
-  <section>
-    <div class="section-head">
-      <h2>📊 Progress Dashboard</h2>
-      <span class="section-tag tag-purple">Live Tracking</span>
-    </div>
-    <div class="dash-grid" id="dashGrid">
-      <!-- rendered by JS -->
-    </div>
-  </section>
 
   <!-- CALENDAR -->
-  <section id="calendar" class="card">
-    <div class="section-head">
-      <h2>📅 15-Day Content Calendar</h2>
-      <div class="filter-row">
-        <select id="filterAccount" class="filter-sel">
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">📅 Content Calendar</div>
+      <div class="cal-filters">
+        <select id="fAcc" class="f-sel" onchange="renderCal()">
           <option value="">All Accounts</option>
-          <option value="@fiwe.social">@fiwe.social</option>
-          <option value="New Account">New Account</option>
         </select>
-        <select id="filterType" class="filter-sel">
+        <select id="fType" class="f-sel" onchange="renderCal()">
           <option value="">All Types</option>
-          <option value="Reel">Reel</option>
-          <option value="Carousel">Carousel</option>
-          <option value="Story">Story</option>
+          <option>Reel</option><option>Carousel</option><option>Story</option>
         </select>
+        <button class="btn btn-p btn-sm" onclick="openModal()">+ Add</button>
       </div>
     </div>
-    <div class="prog-wrap" style="margin-bottom: 20px;">
-      <div id="reelProgFill" class="prog-fill" style="width:0%"></div>
-      <div id="reelProgLabel" class="prog-label">0/30 Reels Published</div>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Day</th><th>Account</th><th>Type</th><th>Format</th><th>Hook / Topic</th><th>CTA</th><th>Status</th><th>✓ Done</th>
-          </tr>
-        </thead>
-        <tbody id="calendarBody"></tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- INFLUENCER TRACKER -->
-  <section class="card">
-    <div class="section-head">
-      <h2>🤝 Influencer Collab Tracker</h2>
-      <div style="display:flex;gap:10px;align-items:center;">
-        <div style="text-align:right;">
-          <div style="font-size:0.7rem;color:var(--muted);">Total Spent</div>
-          <div id="totalSpent" style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--accent2);">₹0</div>
-        </div>
-        <button class="btn btn-ghost" style="font-size:0.82rem;" onclick="addInfluencer()">+ Add</button>
+    <div class="prog-wrap">
+      <div class="prog-info">
+        <span>Progress</span>
+        <span id="progTxt">0 / 0 done</span>
       </div>
+      <div class="prog-bar"><div id="progFill" class="prog-fill" style="width:0%"></div></div>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Influencer Name</th><th>Instagram ID</th><th>Niche</th><th>Followers</th><th>Reel Link</th><th>Price (₹)</th><th>Status</th><th>Downloads</th><th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="influencerBody"></tbody>
-      </table>
+    <div class="cal-cols" id="calCols">
+      <div class="col-h" style="padding-left:10px">Date</div>
+      <div class="col-h">Account</div>
+      <div class="col-h">Type</div>
+      <div class="col-h">Status</div>
+      <div class="col-h">Hook / Topic</div>
+      <div class="col-h">Script</div>
+      <div class="col-h">✓</div>
     </div>
-  </section>
-
-  <!-- CAROUSELS + STATS -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;flex-wrap:wrap;">
-    <section class="card">
-      <div class="section-head">
-        <h2>🎨 Carousels</h2>
-        <span class="section-tag tag-green">3 Total</span>
-      </div>
-      <div id="carouselContainer" style="display:flex;flex-direction:column;gap:14px;"></div>
-    </section>
-    <section class="card">
-      <div class="section-head">
-        <h2>📈 Content Stats</h2>
-        <span class="section-tag tag-yellow">Update Daily</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" id="statsGrid">
-        <!-- rendered by JS -->
-      </div>
-    </section>
+    <div id="calEntries" class="cal-entries"></div>
+    <div id="calEmpty" class="empty" style="display:none">No entries yet. <a href="#" onclick="openModal();return false" style="color:var(--accent)">Add your first →</a></div>
   </div>
 
-  <!-- STICKY NOTES -->
-  <section>
-    <div class="section-head">
-      <h2>📌 Notes & Ideas Board</h2>
-      <span class="section-tag tag-yellow">Sticky Notes</span>
-    </div>
-    <div class="add-sticky-bar">
-      <input id="stickyInput" class="sticky-input" placeholder="Write a note, idea, feedback, or change...">
-      <div style="display:flex;gap:8px;align-items:center;">
-        <div class="color-dot yellow selected" data-color="yellow" onclick="selectColor(this)"></div>
-        <div class="color-dot purple" data-color="purple" onclick="selectColor(this)"></div>
-        <div class="color-dot green" data-color="green" onclick="selectColor(this)"></div>
-        <div class="color-dot red" data-color="red" onclick="selectColor(this)"></div>
-        <div class="color-dot blue" data-color="blue" onclick="selectColor(this)"></div>
+  <!-- INFLUENCERS -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">🤝 Influencer Tracker</div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="text-align:right">
+          <div style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em">Total Spent</div>
+          <div id="totalSpent" style="font-family:'Instrument Serif',serif;font-size:1.4rem;color:var(--accent)">₹0</div>
+        </div>
+        <button class="btn btn-o btn-sm" onclick="addInf()">+ Add</button>
       </div>
-      <button class="btn btn-accent" onclick="addSticky()">📌 Pin Note</button>
     </div>
-    <div class="sticky-board" id="stickyBoard"></div>
-  </section>
+    <div class="t-scroll">
+      <table class="inf-t">
+        <thead><tr>
+          <th>Name</th><th>Instagram ID</th><th>Niche</th><th>Followers</th>
+          <th>Reel Link</th><th>Price (₹)</th><th>Status</th><th>Downloads</th><th></th>
+        </tr></thead>
+        <tbody id="infBody"></tbody>
+      </table>
+    </div>
+    <div id="infEmpty" class="empty" style="display:none">No influencers yet. Click "+ Add" to start.</div>
+  </div>
 
-  <!-- RESOURCES -->
-  <section class="card">
-    <div class="section-head">
-      <h2>📦 Resources & Templates</h2>
+  <!-- CAROUSELS + NOTES -->
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">🎨 Carousels</div>
+        <span class="pill p-blue">3 posts</span>
+      </div>
+      <div class="card-body">
+        <div class="car-grid" id="carGrid"></div>
+      </div>
     </div>
-    <div class="resource-grid">
-      <a href="#" class="resource-card"><div class="r-icon">📊</div><div class="r-label">Google Sheet Calendar</div></a>
-      <a href="#" class="resource-card"><div class="r-icon">📩</div><div class="r-label">Outreach Templates</div></a>
-      <a href="#" class="resource-card"><div class="r-icon">📝</div><div class="r-label">Content Brief</div></a>
-      <a href="#" class="resource-card"><div class="r-icon">🎬</div><div class="r-label">Script Templates</div></a>
-      <a href="#" class="resource-card"><div class="r-icon">#️⃣</div><div class="r-label">Hashtag Bank</div></a>
-      <a href="#" class="resource-card"><div class="r-icon">🤳</div><div class="r-label">Story Templates</div></a>
-    </div>
-  </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-actions">
-      <button class="btn btn-accent" onclick="exportData()">📤 Export All Data</button>
-      <button class="btn btn-ghost" onclick="sharePlan()">🔗 Share Plan</button>
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">📌 Notes & Ideas</div>
+        <span class="pill p-gray" id="noteCnt">0 notes</span>
+      </div>
+      <div class="card-body">
+        <div class="sticky-bar">
+          <input id="noteInp" class="sticky-inp" placeholder="Idea, feedback, change to make…">
+          <div class="swatches">
+            <div class="sw sw-y on" data-c="y" onclick="pickSw(this)"></div>
+            <div class="sw sw-g" data-c="g" onclick="pickSw(this)"></div>
+            <div class="sw sw-b" data-c="b" onclick="pickSw(this)"></div>
+            <div class="sw sw-r" data-c="r" onclick="pickSw(this)"></div>
+            <div class="sw sw-p" data-c="p" onclick="pickSw(this)"></div>
+          </div>
+          <button class="btn btn-p btn-sm" onclick="addNote()">Pin</button>
+        </div>
+        <div class="notes-grid" id="notesGrid"></div>
+        <div id="notesEmpty" class="empty" style="display:none;padding:12px">No notes yet. Write your first idea above!</div>
+      </div>
     </div>
-    <p>All data auto-saves to your browser. Press <kbd style="background:var(--surface2);padding:2px 8px;border-radius:4px;">Ctrl+S</kbd> to force save.</p>
-  </footer>
+  </div>
 
 </main>
 
-<!-- QUICK ADD MODAL -->
-<div id="quickAddModal" class="modal-bg">
+<!-- MODAL -->
+<div id="modal" class="modal-overlay">
   <div class="modal">
-    <h3>+ Quick Add Content</h3>
-    <div class="form-group">
-      <label class="form-label">Hook / Topic</label>
-      <input id="qaTopic" class="form-input" placeholder="What's the hook?">
-    </div>
-    <div class="form-grid2">
-      <div class="form-group">
-        <label class="form-label">Type</label>
-        <select id="qaType" class="form-input">
-          <option>Reel</option><option>Carousel</option><option>Story</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Account</label>
-        <select id="qaAccount" class="form-input">
-          <option>@fiwe.social</option><option>New Account</option>
-        </select>
+    <h3>Add Content Entry</h3>
+    <div class="m2">
+      <div class="mf"><label>Date</label><input type="date" id="mDate"></div>
+      <div class="mf"><label>Type</label>
+        <select id="mType"><option>Reel</option><option>Carousel</option><option>Story</option></select>
       </div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Day (1-15)</label>
-      <input id="qaDay" class="form-input" type="number" min="1" max="15" placeholder="e.g. 3">
+    <div class="m2">
+      <div class="mf"><label>Account</label><select id="mAcc"></select></div>
+      <div class="mf"><label>Status</label>
+        <select id="mStat"><option>Planned</option><option>In Progress</option><option>Complete</option><option>Published</option></select>
+      </div>
     </div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-accent" onclick="submitQuickAdd()">Add to Plan</button>
+    <div class="mf"><label>Topic / Hook</label><input type="text" id="mTopic" placeholder="What's the hook or topic?"></div>
+    <div class="m-acts">
+      <button class="btn btn-o" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-p" onclick="submitAdd()">Add Entry</button>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
-<div id="toast">✅ Saved!</div>
+<div id="toast">Saved!</div>
 
 <script>
-// ═══════════════════════════════════════════
-// DEFAULT DATA
-// ═══════════════════════════════════════════
+// ── helpers ───────────────────────────────────
+const LS={
+  get:(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch{return d}},
+  set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))
+};
+const today=new Date();
+const fmt=d=>d.toISOString().split('T')[0];
+const off=n=>fmt(new Date(today.getTime()+n*86400000));
+let _tt;
+const toast=(m='Saved!')=>{const el=document.getElementById('toast');el.textContent=m;el.classList.add('on');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('on'),2100)};
 
-const defaultCalendar = [
-  { day:1, week:1, account:'@fiwe.social', type:'Reel', format:'Talking Head', hook:'Problem Fiwe solves', cta:'Download', status:'Planned', done:false },
-  { day:1, week:1, account:'New Account', type:'Reel', format:'Faceless B-roll', hook:'Aesthetic intro to concept', cta:'Follow', status:'Planned', done:false },
-  { day:2, week:1, account:'@fiwe.social', type:'Reel', format:'POV', hook:'POV: You just joined Fiwe', cta:'Download', status:'Planned', done:false },
-  { day:2, week:1, account:'New Account', type:'Reel', format:'Trending Audio', hook:'Trending sound + app teaser', cta:'Follow', status:'Planned', done:false },
-  { day:3, week:1, account:'@fiwe.social', type:'Carousel', format:'Educational', hook:'5 steps to find your tribe', cta:'Save', status:'Planned', done:false },
-  { day:3, week:1, account:'New Account', type:'Reel', format:'Screen Record', hook:'App walkthrough', cta:'Download', status:'Planned', done:false },
-  { day:4, week:1, account:'@fiwe.social', type:'Reel', format:'Talking Head', hook:'Why DMs don\'t work anymore', cta:'Download', status:'Planned', done:false },
-  { day:4, week:1, account:'New Account', type:'Reel', format:'Faceless', hook:'Find people like you', cta:'Follow', status:'Planned', done:false },
-  { day:5, week:1, account:'@fiwe.social', type:'Reel', format:'Duet/Collab', hook:'Influencer collab drop', cta:'Download', status:'Planned', done:false },
-  { day:5, week:1, account:'New Account', type:'Reel', format:'Trending', hook:'Viral audio + Fiwe reveal', cta:'Follow', status:'Planned', done:false },
-  { day:6, week:1, account:'@fiwe.social', type:'Carousel', format:'Value List', hook:'10 communities you can join today', cta:'Save', status:'Planned', done:false },
-  { day:6, week:1, account:'New Account', type:'Reel', format:'Text-on-screen', hook:'The loneliness problem solved', cta:'Download', status:'Planned', done:false },
-  { day:7, week:1, account:'@fiwe.social', type:'Reel', format:'Talking Head', hook:'Week 1 behind-the-scenes', cta:'Engage', status:'Planned', done:false },
-  { day:7, week:1, account:'New Account', type:'Reel', format:'Montage', hook:'Real users, real connections', cta:'Download', status:'Planned', done:false },
-  { day:8, week:2, account:'@fiwe.social', type:'Reel', format:'Talking Head', hook:'What our first 1000 users said', cta:'Download', status:'Planned', done:false },
-  { day:8, week:2, account:'New Account', type:'Reel', format:'Faceless', hook:'This app changed my social life', cta:'Download', status:'Planned', done:false },
-  { day:9, week:2, account:'@fiwe.social', type:'Reel', format:'Interview', hook:'User testimonial – real story', cta:'Share', status:'Planned', done:false },
-  { day:9, week:2, account:'New Account', type:'Reel', format:'Screen Record', hook:'How to use the discovery feed', cta:'Download', status:'Planned', done:false },
-  { day:10, week:2, account:'@fiwe.social', type:'Reel', format:'Collab Drop', hook:'Influencer feature live', cta:'Download', status:'Planned', done:false },
-  { day:10, week:2, account:'New Account', type:'Reel', format:'Trending', hook:'POV: Finally a platform that gets me', cta:'Follow', status:'Planned', done:false },
-  { day:11, week:2, account:'@fiwe.social', type:'Carousel', format:'Case Study', hook:'From 0 to first community – real story', cta:'Save', status:'Planned', done:false },
-  { day:11, week:2, account:'New Account', type:'Reel', format:'Talking Head', hook:'Stop doomscrolling, start connecting', cta:'Download', status:'Planned', done:false },
-  { day:12, week:2, account:'@fiwe.social', type:'Reel', format:'Tutorial', hook:'3 features no one uses but should', cta:'Download', status:'Planned', done:false },
-  { day:12, week:2, account:'New Account', type:'Reel', format:'Faceless', hook:'Fiwe vs other apps comparison', cta:'Download', status:'Planned', done:false },
-  { day:13, week:2, account:'@fiwe.social', type:'Reel', format:'Collab Drop', hook:'Mega influencer reveal', cta:'Download', status:'Planned', done:false },
-  { day:13, week:2, account:'New Account', type:'Reel', format:'Trending Audio', hook:'Day 13 viral push', cta:'Follow', status:'Planned', done:false },
-  { day:14, week:2, account:'@fiwe.social', type:'Reel', format:'Talking Head', hook:'Almost at goal – community update', cta:'Share', status:'Planned', done:false },
-  { day:14, week:2, account:'New Account', type:'Reel', format:'Montage', hook:'2000 users in 2 weeks', cta:'Download', status:'Planned', done:false },
-  { day:15, week:2, account:'@fiwe.social', type:'Reel', format:'Celebration', hook:'Launch milestone celebration', cta:'Download', status:'Planned', done:false },
-  { day:15, week:2, account:'New Account', type:'Reel', format:'Celebration', hook:'Final push – join today', cta:'Download', status:'Planned', done:false },
+// ── defaults ──────────────────────────────────
+const defAccounts=['@fiwe.social','@fiwe.launch'];
+
+const defCal=[
+  {id:1,date:off(0),account:'@fiwe.social',type:'Reel',hook:'Problem Fiwe solves for real people',status:'Planned',done:false,script:'',scriptLink:''},
+  {id:2,date:off(0),account:'@fiwe.launch',type:'Reel',hook:'Aesthetic intro – what is Fiwe?',status:'Planned',done:false,script:'',scriptLink:''},
+  {id:3,date:off(1),account:'@fiwe.social',type:'Reel',hook:'POV: You just found your tribe',status:'Planned',done:false,script:'',scriptLink:''},
+  {id:4,date:off(1),account:'@fiwe.launch',type:'Reel',hook:'Trending audio + app teaser',status:'Planned',done:false,script:'',scriptLink:''},
+  {id:5,date:off(2),account:'@fiwe.social',type:'Carousel',hook:'5 steps to find your tribe on Fiwe',status:'Planned',done:false,script:'',scriptLink:''},
+  {id:6,date:off(2),account:'@fiwe.launch',type:'Reel',hook:'App walkthrough in 60 seconds',status:'Planned',done:false,script:'',scriptLink:''},
+  {id:7,date:off(3),account:'@fiwe.social',type:'Reel',hook:'Why DMs don\'t work anymore',status:'Planned',done:false,script:'',scriptLink:''},
+  {id:8,date:off(4),account:'@fiwe.social',type:'Reel',hook:'Day 5 – Influencer collab drop',status:'Planned',done:false,script:'',scriptLink:''},
 ];
 
-const defaultInfluencers = [
-  { id:1, name:'TechTina', instaId:'@techtina.in', niche:'Productivity', followers:'15k', reelLink:'', price:1500, status:'Agreed', downloads:120 },
-  { id:2, name:'SocialSam', instaId:'@socialsam_', niche:'Community', followers:'22k', reelLink:'', price:2000, status:'Contacted', downloads:0 },
-  { id:3, name:'FitFreya', instaId:'@fitfreya.daily', niche:'Fitness', followers:'18k', reelLink:'', price:1800, status:'Contacted', downloads:0 },
+const defInf=[
+  {id:1,name:'TechTina',instaId:'@techtina.in',niche:'Productivity',followers:'15k',reelLink:'',price:1500,status:'Agreed',downloads:120},
+  {id:2,name:'SocialSam',instaId:'@socialsam_',niche:'Community',followers:'22k',reelLink:'',price:2000,status:'Contacted',downloads:0},
 ];
 
-const defaultCarousels = [
-  { id:1, title:'Find Your Tribe on Fiwe', slides:7, status:'Designing', link:'', saves:0, shares:0 },
-  { id:2, title:'Why Interest-Based > Follower-Based', slides:5, status:'Not Started', link:'', saves:0, shares:0 },
-  { id:3, title:'Launch Week Feature Tour', slides:10, status:'Not Started', link:'', saves:0, shares:0 },
+const defCar=[
+  {id:1,title:'Find Your Tribe on Fiwe',slides:7,status:'Designing',link:'',saves:0,shares:0},
+  {id:2,title:'Interest-Based vs Follower-Based',slides:5,status:'Not Started',link:'',saves:0,shares:0},
+  {id:3,title:'Launch Week Feature Tour',slides:10,status:'Not Started',link:'',saves:0,shares:0},
 ];
 
-const defaultStats = { scriptsTotal:30, scriptsDone:0, postsTotal:30, postsDone:0, influencersTarget:7, influencersFound:0, idsTarget:20, idsCollected:0, downloads:0, reach:0 };
+// ── state ─────────────────────────────────────
+let S={
+  accounts: LS.get('fw3_acc', defAccounts),
+  cal:      LS.get('fw3_cal', defCal),
+  inf:      LS.get('fw3_inf', defInf),
+  car:      LS.get('fw3_car', defCar),
+  notes:    LS.get('fw3_notes', []),
+};
+let noteColor='y';
 
-const defaultStickies = [
-  { id: Date.now()-100, text: '🚀 Launch push Day 5: Boost best-performing reel with ₹500 ads', color:'purple', date: new Date().toLocaleDateString('en-IN') },
-  { id: Date.now()-50, text: '💡 Idea: Create a "before Fiwe" vs "after Fiwe" reel format', color:'yellow', date: new Date().toLocaleDateString('en-IN') },
-];
-
-// ═══════════════════════════════════════════
-// STATE (localStorage backed)
-// ═══════════════════════════════════════════
-const load = (key, def) => { try { return JSON.parse(localStorage.getItem(key)) || def; } catch { return def; } };
-const save = (key, val) => localStorage.setItem(key, JSON.stringify(val));
-
-let state = {
-  calendar: load('fw_calendar', defaultCalendar),
-  influencers: load('fw_influencers', defaultInfluencers),
-  carousels: load('fw_carousels', defaultCarousels),
-  stats: load('fw_stats', defaultStats),
-  stickies: load('fw_stickies', defaultStickies),
+const save=()=>{
+  LS.set('fw3_acc',S.accounts);
+  LS.set('fw3_cal',S.cal);
+  LS.set('fw3_inf',S.inf);
+  LS.set('fw3_car',S.car);
+  LS.set('fw3_notes',S.notes);
 };
 
-let stickyColor = 'yellow';
+// ── stats ─────────────────────────────────────
+function renderStats(){
+  const reels=S.cal.filter(i=>i.type==='Reel');
+  const doneReels=reels.filter(i=>i.done).length;
+  const donePosts=S.cal.filter(i=>i.done).length;
+  const infOk=S.inf.filter(i=>['Agreed','Content Received','Posted'].includes(i.status)).length;
+  const totalDl=S.inf.reduce((s,i)=>s+i.downloads,0);
 
-const saveAll = () => {
-  save('fw_calendar', state.calendar);
-  save('fw_influencers', state.influencers);
-  save('fw_carousels', state.carousels);
-  save('fw_stats', state.stats);
-  save('fw_stickies', state.stickies);
-};
-
-// ═══════════════════════════════════════════
-// TOAST
-// ═══════════════════════════════════════════
-let toastTimer;
-const toast = (msg='✅ Saved!') => {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
-};
-
-// ═══════════════════════════════════════════
-// DASHBOARD
-// ═══════════════════════════════════════════
-const renderDash = () => {
-  const s = state.stats;
-  const cal = state.calendar;
-  const scriptsDone = cal.filter(i => i.type === 'Reel' && i.status !== 'Planned').length;
-  const postsDone = cal.filter(i => i.done).length;
-  const infFound = state.influencers.filter(i => i.status !== 'Contacted').length;
-  const idsCollected = state.influencers.length;
-
-  const items = [
-    { num: `${scriptsDone}/${cal.filter(i=>i.type==='Reel').length}`, label:'Scripts Done', sub:'Reels scripted & in progress', color:'var(--accent)', pct: cal.filter(i=>i.type==='Reel').length > 0 ? scriptsDone/cal.filter(i=>i.type==='Reel').length*100 : 0 },
-    { num: `${postsDone}/${cal.length}`, label:'Posts Published', sub:'Across both accounts', color:'var(--accent2)', pct: cal.length > 0 ? postsDone/cal.length*100 : 0 },
-    { num: `${infFound}/${state.influencers.length}`, label:'Influencers Confirmed', sub:'Agreed / Content received / Posted', color:'var(--accent3)', pct: state.influencers.length > 0 ? infFound/state.influencers.length*100 : 0 },
-    { num: `${idsCollected}`, label:'Influencer IDs Added', sub:'Instagram profiles in tracker', color:'var(--accent4)', pct: Math.min(idsCollected/7*100, 100) },
-    { num: `${state.influencers.reduce((s,i)=>s+i.downloads,0).toLocaleString()}`, label:'Downloads (Influencer)', sub:'Via influencer collabs', color:'var(--accent)', pct: Math.min(state.influencers.reduce((s,i)=>s+i.downloads,0)/3500*100,100) },
-    { num: `₹${state.influencers.reduce((s,i)=>s+i.price,0).toLocaleString()}`, label:'Total Spent', sub:'Influencer payments', color:'var(--accent2)', pct: 0, noPct: true },
+  const items=[
+    {cls:'s-a',num:`${doneReels}/${reels.length}`,lbl:'Scripts Done',pct:reels.length?doneReels/reels.length*100:0},
+    {cls:'s-g',num:`${donePosts}/${S.cal.length}`,lbl:'Posts Published',pct:S.cal.length?donePosts/S.cal.length*100:0},
+    {cls:'s-b',num:`${infOk}/${S.inf.length}`,lbl:'Influencers Confirmed',pct:S.inf.length?infOk/S.inf.length*100:0},
+    {cls:'s-y',num:totalDl.toLocaleString(),lbl:'Downloads via Inf.',pct:Math.min(totalDl/3500*100,100)},
   ];
-
-  const grid = document.getElementById('dashGrid');
-  grid.innerHTML = items.map(it => `
-    <div class="dash-stat">
-      <div class="stat-glow" style="background:${it.color}"></div>
-      <div class="stat-num" style="color:${it.color}">${it.num}</div>
-      <div class="stat-label">${it.label}</div>
-      <div class="stat-sub">${it.sub}</div>
-      ${!it.noPct ? `<div class="stat-bar"><div class="stat-bar-fill" style="width:${it.pct.toFixed(0)}%;background:${it.color}"></div></div>` : ''}
+  document.getElementById('statsGrid').innerHTML=items.map(i=>`
+    <div class="stat ${i.cls}">
+      <div class="s-num">${i.num}</div>
+      <div class="s-lbl">${i.lbl}</div>
+      <div class="s-bar"><div class="s-fill" style="width:${i.pct.toFixed(0)}%"></div></div>
     </div>
   `).join('');
-};
+}
 
-// ═══════════════════════════════════════════
-// CALENDAR
-// ═══════════════════════════════════════════
-const renderCalendar = () => {
-  const acc = document.getElementById('filterAccount').value;
-  const typ = document.getElementById('filterType').value;
-  const q = document.getElementById('globalSearch').value.toLowerCase();
-
-  let data = state.calendar.filter(i =>
-    (!acc || i.account === acc) &&
-    (!typ || i.type === typ) &&
-    (!q || i.hook.toLowerCase().includes(q) || i.format.toLowerCase().includes(q))
-  ).sort((a,b) => a.day - b.day);
-
-  const tbody = document.getElementById('calendarBody');
-  tbody.innerHTML = '';
-
-  data.forEach((item, idx) => {
-    const realIdx = state.calendar.indexOf(item);
-    const statusPill = { Planned:'sp-planned', 'In Progress':'sp-progress', Complete:'sp-complete', Published:'sp-published' }[item.status] || 'sp-planned';
-    const tr = document.createElement('tr');
-    if(item.done) tr.classList.add('done-row');
-    tr.innerHTML = `
-      <td><span class="day-badge ${item.week===2?'w2':''}">${item.day}</span></td>
-      <td style="font-size:0.8rem;color:var(--muted)">${item.account}</td>
-      <td style="font-weight:600">${item.type}</td>
-      <td style="color:var(--muted);font-size:0.82rem">${item.format}</td>
-      <td><input class="table-input" value="${item.hook}" onchange="updateCal(${realIdx},'hook',this.value)" style="min-width:140px"></td>
-      <td style="font-size:0.78rem;font-weight:600;color:var(--accent3)">${item.cta}</td>
-      <td>
-        <select class="table-sel" onchange="updateCal(${realIdx},'status',this.value)">
-          <option ${item.status==='Planned'?'selected':''}>Planned</option>
-          <option ${item.status==='In Progress'?'selected':''}>In Progress</option>
-          <option ${item.status==='Complete'?'selected':''}>Complete</option>
-          <option ${item.status==='Published'?'selected':''}>Published</option>
-        </select>
-      </td>
-      <td class="check-wrap"><input type="checkbox" class="big-check" ${item.done?'checked':''} onchange="toggleCalDone(${realIdx})"></td>
-    `;
-    tbody.appendChild(tr);
-  });
-
-  // Progress bar
-  const totalReels = state.calendar.filter(i=>i.type==='Reel').length;
-  const doneReels = state.calendar.filter(i=>i.type==='Reel'&&i.done).length;
-  const pct = totalReels > 0 ? (doneReels/totalReels*100).toFixed(0) : 0;
-  document.getElementById('reelProgFill').style.width = pct+'%';
-  document.getElementById('reelProgLabel').textContent = `${doneReels}/${totalReels} Reels Published`;
-};
-
-const updateCal = (idx, key, val) => {
-  state.calendar[idx][key] = val;
-  if(key==='status' && val==='Published') state.calendar[idx].done = true;
-  saveAll();
-  if(key==='status') renderCalendar();
-  renderDash();
-  toast('Saved!');
-};
-
-const toggleCalDone = (idx) => {
-  state.calendar[idx].done = !state.calendar[idx].done;
-  if(state.calendar[idx].done && state.calendar[idx].status !== 'Published') state.calendar[idx].status = 'Complete';
-  saveAll();
-  renderCalendar();
-  renderDash();
-  checkCompletion();
-};
-
-// ═══════════════════════════════════════════
-// INFLUENCERS
-// ═══════════════════════════════════════════
-const renderInfluencers = () => {
-  const tbody = document.getElementById('influencerBody');
-  tbody.innerHTML = '';
-  state.influencers.forEach((inf, idx) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><input class="table-input" value="${inf.name}" onchange="updateInf(${idx},'name',this.value)" style="min-width:100px"></td>
-      <td><input class="table-input" value="${inf.instaId||''}" placeholder="@handle" onchange="updateInf(${idx},'instaId',this.value)" style="color:var(--accent);min-width:110px"></td>
-      <td><input class="table-input" value="${inf.niche}" onchange="updateInf(${idx},'niche',this.value)"></td>
-      <td><input class="table-input" value="${inf.followers}" onchange="updateInf(${idx},'followers',this.value)" style="width:60px"></td>
-      <td>
-        ${inf.reelLink ? `<a href="${inf.reelLink}" target="_blank" class="inf-link" style="font-size:0.8rem">🔗 View</a>` : ''}
-        <input class="table-input" value="${inf.reelLink||''}" placeholder="Paste reel URL" onchange="updateInf(${idx},'reelLink',this.value)" style="font-size:0.75rem;color:var(--muted);min-width:120px">
-      </td>
-      <td style="color:var(--accent2);font-weight:700">₹<input class="table-input" type="number" value="${inf.price}" onchange="updateInf(${idx},'price',parseFloat(this.value)||0)" style="width:70px;color:var(--accent2)"></td>
-      <td>
-        <select class="table-sel" onchange="updateInf(${idx},'status',this.value)">
-          <option ${inf.status==='Contacted'?'selected':''}>Contacted</option>
-          <option ${inf.status==='Agreed'?'selected':''}>Agreed</option>
-          <option ${inf.status==='Content Received'?'selected':''}>Content Received</option>
-          <option ${inf.status==='Posted'?'selected':''}>Posted</option>
-        </select>
-      </td>
-      <td style="color:var(--accent3);font-weight:700"><input class="table-input" type="number" value="${inf.downloads}" onchange="updateInf(${idx},'downloads',parseInt(this.value)||0)" style="width:60px;color:var(--accent3)"></td>
-      <td><button onclick="deleteInf(${idx})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.8rem;padding:4px 8px;border-radius:6px;transition:color 0.15s" onmouseover="this.style.color='var(--accent2)'" onmouseout="this.style.color='var(--muted)'">✕ Delete</button></td>
-    `;
-    tbody.appendChild(tr);
-  });
-  const total = state.influencers.reduce((s,i)=>s+i.price,0);
-  document.getElementById('totalSpent').textContent = '₹'+total.toLocaleString();
-};
-
-const updateInf = (idx, key, val) => {
-  state.influencers[idx][key] = val;
-  saveAll();
-  renderInfluencers();
-  renderDash();
-  toast('Saved!');
-};
-const addInfluencer = () => {
-  state.influencers.push({ id:Date.now(), name:'New Influencer', instaId:'@handle', niche:'', followers:'0', reelLink:'', price:0, status:'Contacted', downloads:0 });
-  saveAll();
-  renderInfluencers();
-  renderDash();
-};
-const deleteInf = (idx) => {
-  if(!confirm('Delete this influencer?')) return;
-  state.influencers.splice(idx, 1);
-  saveAll();
-  renderInfluencers();
-  renderDash();
-  toast('Deleted!');
-};
-
-// ═══════════════════════════════════════════
-// CAROUSELS
-// ═══════════════════════════════════════════
-const renderCarousels = () => {
-  const container = document.getElementById('carouselContainer');
-  container.innerHTML = '';
-  state.carousels.forEach((c, idx) => {
-    const statusColor = { 'Not Started':'var(--muted)', 'Designing':'var(--accent4)', 'Complete':'var(--accent3)' }[c.status] || 'var(--muted)';
-    const el = document.createElement('div');
-    el.className = 'carousel-card';
-    el.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;">
-        <input type="text" value="${c.title}" onchange="updateCar(${idx},'title',this.value)" style="font-weight:600;font-size:0.95rem">
-        <select class="table-sel" onchange="updateCar(${idx},'status',this.value)" style="color:${statusColor}">
-          <option ${c.status==='Not Started'?'selected':''}>Not Started</option>
-          <option ${c.status==='Designing'?'selected':''}>Designing</option>
-          <option ${c.status==='Complete'?'selected':''}>Complete</option>
-        </select>
-      </div>
-      <div style="font-size:0.78rem;color:var(--muted);margin-bottom:10px">${c.slides} slides</div>
-      <input type="text" value="${c.link||''}" placeholder="Paste Canva link..." onchange="updateCar(${idx},'link',this.value)" style="font-size:0.78rem;color:var(--accent);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 10px;width:100%;outline:none;margin-bottom:0">
-      <div class="metric-row">
-        <div class="metric-mini">Saves<span><input type="number" value="${c.saves}" onchange="updateCar(${idx},'saves',parseInt(this.value)||0)" style="background:transparent;border:none;color:var(--text);font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;width:60px;outline:none"></span></div>
-        <div class="metric-mini">Shares<span><input type="number" value="${c.shares}" onchange="updateCar(${idx},'shares',parseInt(this.value)||0)" style="background:transparent;border:none;color:var(--text);font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;width:60px;outline:none"></span></div>
-      </div>
-    `;
-    container.appendChild(el);
-  });
-};
-const updateCar = (idx, key, val) => {
-  state.carousels[idx][key] = val;
-  saveAll();
-  if(key==='status') renderCarousels();
-  toast('Saved!');
-};
-
-// ═══════════════════════════════════════════
-// STATS GRID (editable counters)
-// ═══════════════════════════════════════════
-const renderStats = () => {
-  const grid = document.getElementById('statsGrid');
-  const statDefs = [
-    { key:'downloads', label:'Total Downloads', color:'var(--accent)', prefix:'' },
-    { key:'reach', label:'Total Reach', color:'var(--accent2)', prefix:'' },
-  ];
-  grid.innerHTML = statDefs.map(s => `
-    <div class="dash-stat" style="grid-column:span 1">
-      <div class="stat-glow" style="background:${s.color}"></div>
-      <label style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;display:block;margin-bottom:6px">${s.label}</label>
-      <input type="number" value="${state.stats[s.key]||0}" 
-        onchange="state.stats['${s.key}']=parseInt(this.value)||0;saveAll();renderDash();toast('Saved!')"
-        style="background:transparent;border:none;color:${s.color};font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;width:100%;outline:none">
+// ── accounts ──────────────────────────────────
+function renderAccounts(){
+  document.getElementById('accList').innerHTML=S.accounts.map((a,i)=>`
+    <div class="acc-tag">
+      <span>${a}</span>
+      <button onclick="delAcc(${i})" title="Remove">✕</button>
     </div>
   `).join('');
-};
+  syncAccDropdowns();
+}
+function addAcc(){
+  let v=document.getElementById('accInput').value.trim();
+  if(!v)return;
+  if(!v.startsWith('@'))v='@'+v;
+  if(S.accounts.includes(v)){toast('Already exists!');return}
+  S.accounts.push(v);save();renderAccounts();toast('Account added!');
+  document.getElementById('accInput').value='';
+}
+function delAcc(i){
+  if(!confirm(`Remove ${S.accounts[i]}?`))return;
+  S.accounts.splice(i,1);save();renderAccounts();toast('Removed');
+}
+function syncAccDropdowns(){
+  const opts=S.accounts.map(a=>`<option value="${a}">${a}</option>`).join('');
+  const fAcc=document.getElementById('fAcc');
+  const mAcc=document.getElementById('mAcc');
+  const prevF=fAcc.value;
+  fAcc.innerHTML='<option value="">All Accounts</option>'+opts;
+  if(prevF)fAcc.value=prevF;
+  mAcc.innerHTML=opts;
+}
 
-// ═══════════════════════════════════════════
-// STICKY NOTES
-// ═══════════════════════════════════════════
-const selectColor = (el) => {
-  document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
-  el.classList.add('selected');
-  stickyColor = el.dataset.color;
-};
+// ── calendar ──────────────────────────────────
+function renderCal(){
+  const accF=document.getElementById('fAcc').value;
+  const typeF=document.getElementById('fType').value;
+  const q=document.getElementById('gSearch').value.toLowerCase();
 
-const addSticky = () => {
-  const text = document.getElementById('stickyInput').value.trim();
-  if(!text) return;
-  state.stickies.push({ id:Date.now(), text, color:stickyColor, date:new Date().toLocaleDateString('en-IN') });
-  saveAll();
-  renderStickies();
-  document.getElementById('stickyInput').value = '';
-  toast('Note pinned! 📌');
-};
+  let data=S.cal
+    .filter(i=>(!accF||i.account===accF)&&(!typeF||i.type===typeF)&&(!q||i.hook.toLowerCase().includes(q)||i.account.toLowerCase().includes(q)))
+    .sort((a,b)=>a.date.localeCompare(b.date)||a.id-b.id);
 
-const deleteSticky = (id) => {
-  state.stickies = state.stickies.filter(s=>s.id!==id);
-  saveAll();
-  renderStickies();
-};
+  const wrap=document.getElementById('calEntries');
+  const empty=document.getElementById('calEmpty');
+  wrap.innerHTML='';
 
-const updateStickyText = (id, val) => {
-  const s = state.stickies.find(s=>s.id===id);
-  if(s) s.text = val;
-  saveAll();
-};
+  if(!data.length){empty.style.display='block';wrap.style.display='none';return}
+  empty.style.display='none';wrap.style.display='flex';
 
-const renderStickies = () => {
-  const board = document.getElementById('stickyBoard');
-  board.innerHTML = '';
-  if(state.stickies.length === 0) {
-    board.innerHTML = '<div style="color:var(--muted);font-size:0.9rem;padding:20px">No notes yet. Add your first sticky note above! ☝️</div>';
-    return;
-  }
-  state.stickies.forEach(s => {
-    const el = document.createElement('div');
-    el.className = `sticky color-${s.color}`;
-    el.innerHTML = `
-      <div class="pin-dot"></div>
-      <div class="sticky-date">${s.date}</div>
-      <textarea rows="4" onblur="updateStickyText(${s.id}, this.value)">${s.text}</textarea>
-      <div class="sticky-actions">
-        <span></span>
-        <button class="del-btn" onclick="deleteSticky(${s.id})">✕ Remove</button>
+  data.forEach(item=>{
+    const ri=S.cal.findIndex(i=>i.id===item.id);
+    const el=document.createElement('div');
+    el.className='entry'+(item.done?' is-done':'');
+    el.id='entry-'+item.id;
+
+    // Script preview text
+    const sprev=item.scriptLink
+      ?`<a href="${item.scriptLink}" target="_blank" style="color:var(--accent);font-size:12px" onclick="event.stopPropagation()">🔗 View</a>`
+      :item.script
+        ?`<span class="pill p-green" style="font-size:11px">✓ Written</span>`
+        :`<span style="color:var(--muted);font-size:12px">+ Script</span>`;
+
+    el.innerHTML=`
+      <div class="e-row">
+        <div class="ec"><input type="date" value="${item.date}" onchange="updCal(${ri},'date',this.value)"></div>
+        <div class="ec">
+          <select onchange="updCal(${ri},'account',this.value)">
+            ${S.accounts.map(a=>`<option value="${a}" ${a===item.account?'selected':''}>${a}</option>`).join('')}
+          </select>
+        </div>
+        <div class="ec">
+          <select onchange="updCal(${ri},'type',this.value)">
+            ${['Reel','Carousel','Story'].map(t=>`<option ${t===item.type?'selected':''}>${t}</option>`).join('')}
+          </select>
+        </div>
+        <div class="ec">
+          <select onchange="updCal(${ri},'status',this.value)">
+            ${['Planned','In Progress','Complete','Published'].map(s=>`<option ${s===item.status?'selected':''}>${s}</option>`).join('')}
+          </select>
+        </div>
+        <div class="ec hook-c"><input type="text" value="${item.hook.replace(/"/g,'&quot;')}" placeholder="Topic / hook…" onblur="updCal(${ri},'hook',this.value)"></div>
+        <div class="ec" style="cursor:pointer" onclick="toggleScript(${item.id})">${sprev}</div>
+        <div class="ec"><input type="checkbox" class="chk" ${item.done?'checked':''} onchange="toggleDone(${ri})"></div>
+      </div>
+      <button class="e-expander" id="ebtn-${item.id}" onclick="toggleScript(${item.id})">
+        <span>📝 Script ${item.script?'(written)':''} ${item.scriptLink?'• link added':''}</span>
+        <span class="arr">▾</span>
+      </button>
+      <div class="script-panel" id="sp-${item.id}">
+        <div>
+          <div class="sp-lbl">Write Script</div>
+          <textarea class="sp-ta" placeholder="Write your full reel/post script here…" onblur="updCal(${ri},'script',this.value)">${item.script||''}</textarea>
+        </div>
+        <div>
+          <div class="sp-lbl">Script Link (Google Doc / Notion / Drive)</div>
+          <div class="sp-link-row">
+            <input class="sp-link-input" type="text" value="${item.scriptLink||''}" placeholder="https://…" onblur="updCal(${ri},'scriptLink',this.value)">
+            ${item.scriptLink?`<a href="${item.scriptLink}" target="_blank" class="btn btn-o btn-xs">Open ↗</a>`:''}
+          </div>
+        </div>
+        <div class="sp-foot">
+          <button class="btn-del" onclick="delEntry(${ri})">🗑 Delete entry</button>
+        </div>
       </div>
     `;
-    board.appendChild(el);
+    wrap.appendChild(el);
   });
-};
 
-// ═══════════════════════════════════════════
-// QUICK ADD MODAL
-// ═══════════════════════════════════════════
-const openQuickAdd = () => document.getElementById('quickAddModal').classList.add('open');
-const closeModal = () => document.getElementById('quickAddModal').classList.remove('open');
-const submitQuickAdd = () => {
-  const topic = document.getElementById('qaTopic').value.trim();
-  if(!topic) { alert('Enter a topic!'); return; }
-  const day = parseInt(document.getElementById('qaDay').value) || 1;
-  state.calendar.push({ day, week: day>7?2:1, account: document.getElementById('qaAccount').value, type: document.getElementById('qaType').value, format:'Custom', hook:topic, cta:'Engage', status:'Planned', done:false });
-  saveAll();
-  renderCalendar();
-  renderDash();
-  closeModal();
-  document.getElementById('qaTopic').value='';
-  document.getElementById('qaDay').value='';
-  toast('Content added! ✅');
-};
-
-// ═══════════════════════════════════════════
-// COMPLETION CONFETTI
-// ═══════════════════════════════════════════
-const checkCompletion = () => {
-  const total = state.calendar.length;
-  const done = state.calendar.filter(i=>i.done).length;
-  if(total > 0 && done === total) {
-    confetti({ particleCount:200, spread:120, origin:{y:0.6}, colors:['#7c5cfc','#ff5e78','#00e5a0','#ffc94a'] });
-    toast('🎉 All content published! Amazing!');
-  }
-};
-
-// ═══════════════════════════════════════════
-// EXPORT
-// ═══════════════════════════════════════════
-const exportData = () => {
-  const data = JSON.stringify({ calendar: state.calendar, influencers: state.influencers, carousels: state.carousels, stats: state.stats, stickies: state.stickies }, null, 2);
-  const blob = new Blob([data], {type:'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'fiwe-tracker-backup.json';
-  a.click();
-  toast('Data exported! 📤');
-};
-const sharePlan = () => {
-  navigator.clipboard.writeText(window.location.href).catch(()=>{});
-  toast('Link copied! 🔗');
-};
-
-// ═══════════════════════════════════════════
-// KEYBOARD SHORTCUTS
-// ═══════════════════════════════════════════
-window.addEventListener('keydown', e => {
-  if(e.ctrlKey && e.key==='s') { e.preventDefault(); saveAll(); toast('Force saved! 💾'); }
-  if(e.ctrlKey && e.key==='f') { e.preventDefault(); document.getElementById('globalSearch').focus(); }
-  if(e.key==='Escape') closeModal();
-});
-
-// ═══════════════════════════════════════════
-// FILTERS & SEARCH
-// ═══════════════════════════════════════════
-document.getElementById('globalSearch').addEventListener('input', renderCalendar);
-document.getElementById('filterAccount').addEventListener('change', renderCalendar);
-document.getElementById('filterType').addEventListener('change', renderCalendar);
-document.getElementById('stickyInput').addEventListener('keydown', e => { if(e.key==='Enter' && (e.ctrlKey||e.metaKey)) addSticky(); });
-document.getElementById('quickAddModal').addEventListener('click', e => { if(e.target===e.currentTarget) closeModal(); });
-
-// ═══════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════
-const renderAll = () => {
-  renderDash();
-  renderCalendar();
-  renderInfluencers();
-  renderCarousels();
-  renderStickies();
+  // progress
+  const total=S.cal.length;
+  const done=S.cal.filter(i=>i.done).length;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('progTxt').textContent=`${done} / ${total} done`;
   renderStats();
-};
+}
 
-renderAll();
+function toggleScript(id){
+  document.getElementById('sp-'+id).classList.toggle('open');
+  document.getElementById('ebtn-'+id).classList.toggle('open');
+}
+
+function updCal(ri,key,val){
+  S.cal[ri][key]=val;
+  if(key==='status'&&val==='Published')S.cal[ri].done=true;
+  save();
+  if(['date','status','done','scriptLink','script'].includes(key))renderCal();
+  else renderStats();
+  toast('Saved!');
+}
+
+function toggleDone(ri){
+  S.cal[ri].done=!S.cal[ri].done;
+  if(S.cal[ri].done&&S.cal[ri].status!=='Published')S.cal[ri].status='Complete';
+  save();renderCal();
+}
+
+function delEntry(ri){
+  if(!confirm('Delete this entry?'))return;
+  S.cal.splice(ri,1);save();renderCal();toast('Deleted');
+}
+
+// ── modal ─────────────────────────────────────
+function openModal(){
+  syncAccDropdowns();
+  document.getElementById('mDate').value=fmt(today);
+  document.getElementById('modal').classList.add('open');
+  setTimeout(()=>document.getElementById('mTopic').focus(),80);
+}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+function submitAdd(){
+  const topic=document.getElementById('mTopic').value.trim();
+  if(!topic){alert('Enter a topic!');return}
+  S.cal.push({
+    id:Date.now(),
+    date:document.getElementById('mDate').value||fmt(today),
+    account:document.getElementById('mAcc').value||S.accounts[0]||'@fiwe.social',
+    type:document.getElementById('mType').value,
+    hook:topic,
+    status:document.getElementById('mStat').value,
+    done:false,script:'',scriptLink:''
+  });
+  save();renderCal();closeModal();
+  document.getElementById('mTopic').value='';
+  toast('Entry added! ✅');
+}
+
+// ── influencers ───────────────────────────────
+function renderInf(){
+  const tbody=document.getElementById('infBody');
+  const empty=document.getElementById('infEmpty');
+  if(!S.inf.length){tbody.innerHTML='';empty.style.display='block';return}
+  empty.style.display='none';
+  tbody.innerHTML=S.inf.map((inf,i)=>`
+    <tr>
+      <td><input class="t-inp" type="text" value="${inf.name}" onblur="updInf(${i},'name',this.value)" style="min-width:80px"></td>
+      <td style="color:var(--accent)"><input class="t-inp" type="text" value="${inf.instaId||''}" placeholder="@handle" onblur="updInf(${i},'instaId',this.value)" style="color:var(--accent);min-width:100px"></td>
+      <td><input class="t-inp" type="text" value="${inf.niche}" onblur="updInf(${i},'niche',this.value)" style="min-width:70px"></td>
+      <td><input class="t-inp" type="text" value="${inf.followers}" onblur="updInf(${i},'followers',this.value)" style="min-width:45px"></td>
+      <td>
+        ${inf.reelLink?`<a href="${inf.reelLink}" target="_blank" class="pill p-blue" style="margin-bottom:3px;display:inline-flex">🔗 View</a><br>`:''}
+        <input class="t-inp" type="text" value="${inf.reelLink||''}" placeholder="Paste reel URL" onblur="updInf(${i},'reelLink',this.value)" style="font-size:11px;color:var(--muted);min-width:100px">
+      </td>
+      <td style="font-weight:600">₹<input class="t-inp" type="number" value="${inf.price}" onblur="updInf(${i},'price',parseFloat(this.value)||0)" style="width:68px;font-weight:600"></td>
+      <td>
+        <select class="t-sel" onchange="updInf(${i},'status',this.value)">
+          ${['Contacted','Agreed','Content Received','Posted'].map(s=>`<option ${s===inf.status?'selected':''}>${s}</option>`).join('')}
+        </select>
+      </td>
+      <td style="font-weight:600;color:var(--green)">
+        <input class="t-inp" type="number" value="${inf.downloads}" onblur="updInf(${i},'downloads',parseInt(this.value)||0)" style="width:55px;font-weight:600;color:var(--green)">
+      </td>
+      <td><button class="btn-del" onclick="delInf(${i})">✕</button></td>
+    </tr>
+  `).join('');
+  document.getElementById('totalSpent').textContent='₹'+S.inf.reduce((s,i)=>s+i.price,0).toLocaleString();
+  renderStats();
+}
+function updInf(i,k,v){S.inf[i][k]=v;save();renderInf();toast('Saved!')}
+function addInf(){S.inf.push({id:Date.now(),name:'New',instaId:'@handle',niche:'',followers:'0k',reelLink:'',price:0,status:'Contacted',downloads:0});save();renderInf();toast('Added!')}
+function delInf(i){if(!confirm('Delete?'))return;S.inf.splice(i,1);save();renderInf();toast('Deleted')}
+
+// ── carousels ─────────────────────────────────
+function renderCar(){
+  document.getElementById('carGrid').innerHTML=S.car.map((c,i)=>`
+    <div class="car-item">
+      <input class="car-title" type="text" value="${c.title}" onblur="updCar(${i},'title',this.value)">
+      <div class="car-row">
+        <span style="font-size:12px;color:var(--muted)">${c.slides} slides</span>
+        <select class="f-sel" style="font-size:12px;padding:4px 8px" onchange="updCar(${i},'status',this.value)">
+          ${['Not Started','Designing','Complete'].map(s=>`<option ${s===c.status?'selected':''}>${s}</option>`).join('')}
+        </select>
+      </div>
+      <input class="car-link-inp" type="text" value="${c.link||''}" placeholder="Canva / Drive link…" onblur="updCar(${i},'link',this.value)">
+      ${c.link?`<a href="${c.link}" target="_blank" style="font-size:12px;color:var(--accent);display:block;margin-top:4px">Open ↗</a>`:''}
+      <div class="m-pair">
+        <div class="m-box"><label>Saves</label><input type="number" value="${c.saves}" onblur="updCar(${i},'saves',parseInt(this.value)||0)"></div>
+        <div class="m-box"><label>Shares</label><input type="number" value="${c.shares}" onblur="updCar(${i},'shares',parseInt(this.value)||0)"></div>
+      </div>
+    </div>
+  `).join('');
+}
+function updCar(i,k,v){S.car[i][k]=v;save();renderCar();toast('Saved!')}
+
+// ── notes ─────────────────────────────────────
+function pickSw(el){document.querySelectorAll('.sw').forEach(s=>s.classList.remove('on'));el.classList.add('on');noteColor=el.dataset.c}
+function addNote(){
+  const t=document.getElementById('noteInp').value.trim();
+  if(!t)return;
+  S.notes.push({id:Date.now(),text:t,color:noteColor,date:new Date().toLocaleDateString('en-IN')});
+  save();renderNotes();document.getElementById('noteInp').value='';toast('Note pinned! 📌');
+}
+function delNote(id){S.notes=S.notes.filter(n=>n.id!==id);save();renderNotes()}
+function updNote(id,v){const n=S.notes.find(n=>n.id===id);if(n)n.text=v;save()}
+function renderNotes(){
+  const grid=document.getElementById('notesGrid');
+  const empty=document.getElementById('notesEmpty');
+  document.getElementById('noteCnt').textContent=S.notes.length+' note'+(S.notes.length!==1?'s':'');
+  if(!S.notes.length){grid.innerHTML='';empty.style.display='block';return}
+  empty.style.display='none';
+  grid.innerHTML=S.notes.map(n=>`
+    <div class="note n-${n.color}">
+      <div class="note-d">${n.date}</div>
+      <textarea rows="4" onblur="updNote(${n.id},this.value)">${n.text}</textarea>
+      <div class="note-foot"><button class="note-del" onclick="delNote(${n.id})">✕ Remove</button></div>
+    </div>
+  `).join('');
+}
+
+// ── keyboard ──────────────────────────────────
+window.addEventListener('keydown',e=>{
+  if(e.ctrlKey&&e.key==='s'){e.preventDefault();save();toast('Force saved! 💾')}
+  if(e.key==='Escape')closeModal();
+  if(e.ctrlKey&&e.key==='f'){e.preventDefault();document.getElementById('gSearch').focus()}
+});
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal()});
+document.getElementById('gSearch').addEventListener('input',renderCal);
+document.getElementById('accInput').addEventListener('keydown',e=>{if(e.key==='Enter')addAcc()});
+document.getElementById('noteInp').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))addNote()});
+
+// ── init ──────────────────────────────────────
+renderAccounts();
+renderCal();
+renderInf();
+renderCar();
+renderNotes();
+renderStats();
 </script>
 </body>
 </html>
