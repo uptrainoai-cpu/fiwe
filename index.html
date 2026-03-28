@@ -1,402 +1,836 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team Content & Influencer Workspace</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            primary: '#6C5CE7',
-                            secondary: '#FF6B6B',
-                            accent: '#00D2A5',
-                            bg: '#F8F9FA',
-                            text: '#2D3748',
-                            darkBg: '#1A202C',
-                            darkCard: '#2D3748',
-                            darkText: '#F7FAFC'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
-    <style type="text/css">
-        body { @apply bg-brand-bg text-brand-text font-sans transition-colors duration-200; }
-        .dark body { @apply bg-brand-darkBg text-brand-darkText; }
-        
-        .card { @apply bg-white p-6 rounded-2xl shadow-sm border border-gray-100 transition-colors duration-200; }
-        .dark .card { @apply bg-brand-darkCard border-gray-700; }
-        
-        .btn-primary { @apply bg-brand-primary text-white px-4 py-2 rounded-xl font-semibold hover:bg-opacity-90 transition; }
-        .btn-secondary { @apply bg-gray-200 text-brand-text px-3 py-1.5 rounded-lg font-medium hover:bg-gray-300 transition text-sm; }
-        .dark .btn-secondary { @apply bg-gray-700 text-brand-darkText hover:bg-gray-600; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiwe 15-Day Launch Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+  :root {
+    --bg: #0f0f13;
+    --surface: #18181f;
+    --surface2: #1f1f2a;
+    --border: #2a2a38;
+    --accent: #7c5cfc;
+    --accent2: #ff5e78;
+    --accent3: #00e5a0;
+    --accent4: #ffc94a;
+    --text: #f0f0f8;
+    --muted: #7070a0;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; min-height: 100vh; }
+  
+  /* NAV */
+  nav { background: rgba(15,15,19,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; padding: 14px 32px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
+  .logo span { color: var(--accent2); }
+  nav .nav-actions { display: flex; gap: 10px; align-items: center; }
+  .btn { padding: 9px 20px; border-radius: 10px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; transition: all 0.18s; }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent:hover { background: #6a4aee; transform: translateY(-1px); }
+  .btn-ghost { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .search-bar { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 9px 16px 9px 38px; border-radius: 10px; font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; width: 240px; outline: none; }
+  .search-bar:focus { border-color: var(--accent); }
+  .search-wrap { position: relative; }
+  .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); width: 16px; }
 
-        /* Seamless Editable Fields */
-        [contenteditable="true"] {
-            @apply outline-none border-b border-transparent transition-colors duration-200 cursor-text;
-        }
-        [contenteditable="true"]:hover { @apply border-gray-300 dark:border-gray-500 border-dashed; }
-        [contenteditable="true"]:focus { @apply border-brand-primary border-solid; }
+  /* MAIN */
+  main { max-width: 1280px; margin: 0 auto; padding: 40px 24px; display: flex; flex-direction: column; gap: 48px; }
 
-        .editable-input {
-            @apply w-full bg-transparent border border-transparent rounded px-1 py-0.5 outline-none transition-colors;
-        }
-        .editable-input:hover { @apply border-gray-300 dark:border-gray-600; }
-        .editable-input:focus { @apply ring-1 ring-brand-primary border-brand-primary bg-white dark:bg-gray-800; }
+  /* HERO */
+  .hero { background: linear-gradient(135deg, var(--surface) 0%, #1a1030 100%); border: 1px solid var(--border); border-radius: 24px; padding: 56px 48px; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -80px; right: -80px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(124,92,252,0.18) 0%, transparent 70%); border-radius: 50%; }
+  .hero::after { content: ''; position: absolute; bottom: -60px; left: -60px; width: 250px; height: 250px; background: radial-gradient(circle, rgba(0,229,160,0.12) 0%, transparent 70%); border-radius: 50%; }
+  .hero-badge { display: inline-block; background: rgba(124,92,252,0.18); color: var(--accent); font-size: 0.78rem; font-weight: 700; padding: 6px 16px; border-radius: 100px; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 20px; border: 1px solid rgba(124,92,252,0.3); }
+  .hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 800; line-height: 1.1; margin-bottom: 18px; }
+  .hero h1 span { color: var(--accent); }
+  .hero p { color: var(--muted); font-size: 1.05rem; max-width: 580px; margin: 0 auto 32px; line-height: 1.7; }
+  .hero-actions { display: flex; gap: 12px; justify-content: center; }
 
-        table { @apply w-full text-sm text-left border-collapse; }
-        th { @apply px-3 py-3 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 uppercase text-xs font-semibold; }
-        td { @apply px-3 py-2 border-b border-gray-100 dark:border-gray-700; }
-        
-        /* Sticky Notes */
-        .sticky-note {
-            @apply p-4 rounded-xl shadow-sm border flex flex-col gap-2 relative group;
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-        }
-        .dark .sticky-note {
-            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
-            @apply border-gray-600;
-        }
+  /* SECTION HEADINGS */
+  .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+  .section-head h2 { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; }
+  .section-tag { font-size: 0.7rem; font-weight: 700; padding: 4px 12px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .tag-purple { background: rgba(124,92,252,0.15); color: var(--accent); border: 1px solid rgba(124,92,252,0.25); }
+  .tag-red { background: rgba(255,94,120,0.15); color: var(--accent2); border: 1px solid rgba(255,94,120,0.25); }
+  .tag-green { background: rgba(0,229,160,0.15); color: var(--accent3); border: 1px solid rgba(0,229,160,0.25); }
+  .tag-yellow { background: rgba(255,201,74,0.15); color: var(--accent4); border: 1px solid rgba(255,201,74,0.25); }
 
-        @media print {
-            body { background: white; color: black; }
-            .no-print, nav { display: none !important; }
-            .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
-            [contenteditable="true"] { border: none !important; }
-        }
-    </style>
+  /* CARD */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; }
+
+  /* DASHBOARD GRID */
+  .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+  .dash-stat { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; cursor: pointer; transition: border-color 0.2s; position: relative; overflow: hidden; }
+  .dash-stat:hover { border-color: var(--accent); }
+  .dash-stat .stat-glow { position: absolute; top: 0; right: 0; width: 80px; height: 80px; border-radius: 50%; filter: blur(30px); opacity: 0.3; }
+  .dash-stat .stat-num { font-family: 'Syne', sans-serif; font-size: 2.8rem; font-weight: 800; line-height: 1; margin-bottom: 6px; }
+  .dash-stat .stat-label { color: var(--muted); font-size: 0.82rem; font-weight: 500; }
+  .dash-stat .stat-sub { font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
+  .dash-stat .stat-bar { height: 4px; background: var(--border); border-radius: 4px; margin-top: 14px; overflow: hidden; }
+  .dash-stat .stat-bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+
+  /* PROGRESS BAR */
+  .prog-wrap { background: var(--surface2); border-radius: 100px; height: 22px; position: relative; overflow: hidden; border: 1px solid var(--border); }
+  .prog-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.5s ease; }
+  .prog-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; color: white; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.85rem; }
+  thead th { background: var(--surface2); color: var(--muted); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; padding: 12px 16px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  thead th:first-child { border-radius: 10px 0 0 10px; }
+  thead th:last-child { border-radius: 0 10px 10px 0; }
+  tbody tr { transition: background 0.15s; }
+  tbody tr:hover td { background: rgba(124,92,252,0.06); }
+  tbody td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  .table-input { background: transparent; border: none; color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; width: 100%; outline: none; }
+  .table-input:focus { background: var(--surface2); border-radius: 6px; padding: 2px 6px; }
+  select.table-sel { background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 0.78rem; padding: 5px 10px; border-radius: 8px; cursor: pointer; outline: none; }
+  select.table-sel:focus { border-color: var(--accent); }
+  .status-pill { display: inline-block; padding: 4px 10px; border-radius: 100px; font-size: 0.7rem; font-weight: 700; }
+  .sp-planned { background: rgba(112,112,160,0.18); color: var(--muted); }
+  .sp-progress { background: rgba(255,201,74,0.18); color: var(--accent4); }
+  .sp-complete { background: rgba(0,229,160,0.18); color: var(--accent3); }
+  .sp-published { background: rgba(124,92,252,0.18); color: var(--accent); }
+  .day-badge { display: inline-block; background: var(--accent); color: white; border-radius: 8px; padding: 3px 10px; font-size: 0.75rem; font-weight: 700; }
+  .day-badge.w2 { background: var(--accent3); color: #0f0f13; }
+
+  /* CHECKBOX */
+  .check-wrap { display: flex; align-items: center; justify-content: center; }
+  input[type=checkbox].big-check { width: 20px; height: 20px; accent-color: var(--accent); cursor: pointer; border-radius: 5px; }
+
+  /* FILTERS */
+  .filter-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .filter-sel { background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 0.82rem; padding: 8px 14px; border-radius: 10px; outline: none; cursor: pointer; }
+  .filter-sel:focus { border-color: var(--accent); }
+
+  /* INFLUENCER TABLE */
+  .inf-link { color: var(--accent); text-decoration: none; font-size: 0.82rem; }
+  .inf-link:hover { text-decoration: underline; }
+
+  /* STICKY NOTES */
+  .sticky-board { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+  .sticky { border-radius: 14px; padding: 18px; position: relative; min-height: 160px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 24px rgba(0,0,0,0.3); transition: transform 0.18s, box-shadow 0.18s; }
+  .sticky:hover { transform: translateY(-4px) rotate(0.5deg); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+  .sticky.color-yellow { background: #2d2a14; border: 1px solid #5a5010; }
+  .sticky.color-purple { background: #1d1630; border: 1px solid #3d2a70; }
+  .sticky.color-green { background: #102a20; border: 1px solid #1a5a40; }
+  .sticky.color-red { background: #2a1018; border: 1px solid #5a1a2a; }
+  .sticky.color-blue { background: #101828; border: 1px solid #1a3858; }
+  .sticky .sticky-date { font-size: 0.68rem; font-weight: 700; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.07em; }
+  .sticky textarea { background: transparent; border: none; color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 0.88rem; line-height: 1.6; resize: none; flex: 1; outline: none; width: 100%; }
+  .sticky .sticky-actions { display: flex; justify-content: space-between; align-items: center; }
+  .sticky .del-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; transition: color 0.15s; }
+  .sticky .del-btn:hover { color: var(--accent2); }
+  .sticky .pin-dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,255,255,0.25); box-shadow: 0 2px 8px rgba(0,0,0,0.4); position: absolute; top: -7px; left: 50%; transform: translateX(-50%); }
+  .add-sticky-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 20px; }
+  .color-dot { width: 26px; height: 26px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: border-color 0.15s, transform 0.15s; }
+  .color-dot:hover, .color-dot.selected { border-color: white; transform: scale(1.2); }
+  .color-dot.yellow { background: #b8a020; }
+  .color-dot.purple { background: #7c5cfc; }
+  .color-dot.green { background: #00a070; }
+  .color-dot.red { background: #d04050; }
+  .color-dot.blue { background: #2060c0; }
+  .sticky-input { background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 0.88rem; padding: 10px 16px; border-radius: 10px; flex: 1; min-width: 180px; outline: none; }
+  .sticky-input:focus { border-color: var(--accent); }
+
+  /* CAROUSELS */
+  .carousel-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .carousel-card input[type=text] { background: transparent; border: none; color: var(--text); font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.95rem; width: 100%; outline: none; }
+  .carousel-card input[type=text]:focus { background: var(--surface); border-radius: 6px; padding: 2px 6px; }
+  .carousel-card input[type=number] { background: transparent; border: none; color: var(--accent3); font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.1rem; width: 56px; outline: none; }
+  .metric-row { display: flex; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .metric-mini { background: var(--surface); border-radius: 8px; padding: 8px 12px; font-size: 0.78rem; color: var(--muted); flex: 1; }
+  .metric-mini span { font-weight: 700; color: var(--text); font-size: 1rem; display: block; }
+
+  /* RESOURCES */
+  .resource-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+  .resource-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 12px; text-align: center; text-decoration: none; color: var(--text); transition: border-color 0.18s, background 0.18s; }
+  .resource-card:hover { border-color: var(--accent); background: rgba(124,92,252,0.08); }
+  .resource-card .r-icon { font-size: 2rem; margin-bottom: 8px; }
+  .resource-card .r-label { font-size: 0.75rem; font-weight: 600; }
+
+  /* MODAL */
+  .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+  .modal-bg.open { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px; width: 100%; max-width: 480px; }
+  .modal h3 { font-family: 'Syne', sans-serif; font-size: 1.4rem; margin-bottom: 20px; }
+  .form-group { margin-bottom: 14px; }
+  .form-label { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; display: block; margin-bottom: 6px; }
+  .form-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; padding: 10px 14px; border-radius: 10px; outline: none; }
+  .form-input:focus { border-color: var(--accent); }
+  .form-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+  /* TOAST */
+  #toast { position: fixed; bottom: 24px; right: 24px; background: var(--accent); color: white; padding: 12px 22px; border-radius: 12px; font-size: 0.88rem; font-weight: 600; z-index: 300; opacity: 0; transform: translateY(10px); transition: all 0.3s; pointer-events: none; }
+  #toast.show { opacity: 1; transform: translateY(0); }
+
+  /* FOOTER */
+  footer { text-align: center; padding: 32px 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.82rem; }
+  footer .footer-actions { display: flex; gap: 12px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
+
+  /* DONE STRIKETHROUGH */
+  tr.done-row td { opacity: 0.5; }
+  
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  @media (max-width: 640px) {
+    nav { padding: 12px 16px; }
+    .hero { padding: 36px 20px; }
+    main { padding: 24px 14px; }
+  }
+</style>
 </head>
-<body class="antialiased pb-20">
+<body>
 
-    <nav class="bg-white/95 dark:bg-brand-darkBg/95 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700 no-print">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-brand-primary flex items-center justify-center text-white font-extrabold text-xl">W</div>
-                <div>
-                    <div contenteditable="true" id="navTitle" class="font-bold text-lg leading-tight">Team Workspace</div>
-                    <p class="text-xs text-brand-accent font-medium">Auto-saving active</p>
-                </div>
-            </div>
-            <button onclick="toggleDarkMode()" class="p-2.5 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition">
-                <span id="themeIcon">🌙</span>
-            </button>
+<!-- NAV -->
+<nav>
+  <div class="logo">Fiwe<span>.</span>Tracker</div>
+  <div class="nav-actions">
+    <div class="search-wrap">
+      <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <input id="globalSearch" class="search-bar" placeholder="Search topics, influencers...">
+    </div>
+    <button class="btn btn-ghost" onclick="openQuickAdd()">+ Quick Add</button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">Content Marketing Command Center</div>
+    <h1>Fiwe 15-Day Launch Plan:<br><span>Your Complete Tracker</span></h1>
+    <p>Battle-tested 15-day content calendar. Launch Fiwe from 0 → 3,500 users using organic strategies & micro-influencer partnerships.</p>
+    <div class="hero-actions">
+      <a href="#calendar" class="btn btn-accent">📅 View Calendar</a>
+      <button class="btn btn-ghost" onclick="exportData()">📤 Export Data</button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <section>
+    <div class="section-head">
+      <h2>📊 Progress Dashboard</h2>
+      <span class="section-tag tag-purple">Live Tracking</span>
+    </div>
+    <div class="dash-grid" id="dashGrid">
+      <!-- rendered by JS -->
+    </div>
+  </section>
+
+  <!-- CALENDAR -->
+  <section id="calendar" class="card">
+    <div class="section-head">
+      <h2>📅 15-Day Content Calendar</h2>
+      <div class="filter-row">
+        <select id="filterAccount" class="filter-sel">
+          <option value="">All Accounts</option>
+          <option value="@fiwe.social">@fiwe.social</option>
+          <option value="New Account">New Account</option>
+        </select>
+        <select id="filterType" class="filter-sel">
+          <option value="">All Types</option>
+          <option value="Reel">Reel</option>
+          <option value="Carousel">Carousel</option>
+          <option value="Story">Story</option>
+        </select>
+      </div>
+    </div>
+    <div class="prog-wrap" style="margin-bottom: 20px;">
+      <div id="reelProgFill" class="prog-fill" style="width:0%"></div>
+      <div id="reelProgLabel" class="prog-label">0/30 Reels Published</div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Day</th><th>Account</th><th>Type</th><th>Format</th><th>Hook / Topic</th><th>CTA</th><th>Status</th><th>✓ Done</th>
+          </tr>
+        </thead>
+        <tbody id="calendarBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- INFLUENCER TRACKER -->
+  <section class="card">
+    <div class="section-head">
+      <h2>🤝 Influencer Collab Tracker</h2>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <div style="text-align:right;">
+          <div style="font-size:0.7rem;color:var(--muted);">Total Spent</div>
+          <div id="totalSpent" style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--accent2);">₹0</div>
         </div>
-    </nav>
+        <button class="btn btn-ghost" style="font-size:0.82rem;" onclick="addInfluencer()">+ Add</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Influencer Name</th><th>Instagram ID</th><th>Niche</th><th>Followers</th><th>Reel Link</th><th>Price (₹)</th><th>Status</th><th>Downloads</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="influencerBody"></tbody>
+      </table>
+    </div>
+  </section>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+  <!-- CAROUSELS + STATS -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;flex-wrap:wrap;">
+    <section class="card">
+      <div class="section-head">
+        <h2>🎨 Carousels</h2>
+        <span class="section-tag tag-green">3 Total</span>
+      </div>
+      <div id="carouselContainer" style="display:flex;flex-direction:column;gap:14px;"></div>
+    </section>
+    <section class="card">
+      <div class="section-head">
+        <h2>📈 Content Stats</h2>
+        <span class="section-tag tag-yellow">Update Daily</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" id="statsGrid">
+        <!-- rendered by JS -->
+      </div>
+    </section>
+  </div>
 
-        <section class="text-center py-10 bg-white dark:bg-brand-darkCard rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 px-6">
-            <h1 contenteditable="true" id="heroTitle" class="text-4xl md:text-5xl font-extrabold text-brand-text dark:text-brand-darkText mb-4">
-                Master Launch Plan & Tracker
-            </h1>
-            <p contenteditable="true" id="heroSub" class="text-lg text-gray-500 max-w-2xl mx-auto">
-                Track your reels, scripts, influencers, and daily feedback in one editable space. Just click and type anywhere to edit.
-            </p>
-        </section>
+  <!-- STICKY NOTES -->
+  <section>
+    <div class="section-head">
+      <h2>📌 Notes & Ideas Board</h2>
+      <span class="section-tag tag-yellow">Sticky Notes</span>
+    </div>
+    <div class="add-sticky-bar">
+      <input id="stickyInput" class="sticky-input" placeholder="Write a note, idea, feedback, or change...">
+      <div style="display:flex;gap:8px;align-items:center;">
+        <div class="color-dot yellow selected" data-color="yellow" onclick="selectColor(this)"></div>
+        <div class="color-dot purple" data-color="purple" onclick="selectColor(this)"></div>
+        <div class="color-dot green" data-color="green" onclick="selectColor(this)"></div>
+        <div class="color-dot red" data-color="red" onclick="selectColor(this)"></div>
+        <div class="color-dot blue" data-color="blue" onclick="selectColor(this)"></div>
+      </div>
+      <button class="btn btn-accent" onclick="addSticky()">📌 Pin Note</button>
+    </div>
+    <div class="sticky-board" id="stickyBoard"></div>
+  </section>
 
-        <section class="space-y-4">
-            <h2 contenteditable="true" id="dashTitle" class="text-2xl font-bold">Live Progress Dashboard</h2>
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="card flex items-center gap-4 border-l-4 border-blue-500">
-                    <div class="text-3xl">📝</div>
-                    <div>
-                        <div id="metricScripts" class="text-3xl font-black text-blue-600 dark:text-blue-400">0</div>
-                        <div class="text-sm font-medium text-gray-500">Scripts Done</div>
-                    </div>
-                </div>
-                <div class="card flex items-center gap-4 border-l-4 border-brand-primary">
-                    <div class="text-3xl">✅</div>
-                    <div>
-                        <div id="metricPosts" class="text-3xl font-black text-brand-primary">0</div>
-                        <div class="text-sm font-medium text-gray-500">Posts Published</div>
-                    </div>
-                </div>
-                <div class="card flex items-center gap-4 border-l-4 border-brand-secondary">
-                    <div class="text-3xl">🔎</div>
-                    <div>
-                        <div id="metricInfFound" class="text-3xl font-black text-brand-secondary">0</div>
-                        <div class="text-sm font-medium text-gray-500">Influencers Found</div>
-                    </div>
-                </div>
-                <div class="card flex items-center gap-4 border-l-4 border-brand-accent">
-                    <div class="text-3xl">🤝</div>
-                    <div>
-                        <div id="metricCollabs" class="text-3xl font-black text-brand-accent">0</div>
-                        <div class="text-sm font-medium text-gray-500">Active Collabs</div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <!-- RESOURCES -->
+  <section class="card">
+    <div class="section-head">
+      <h2>📦 Resources & Templates</h2>
+    </div>
+    <div class="resource-grid">
+      <a href="#" class="resource-card"><div class="r-icon">📊</div><div class="r-label">Google Sheet Calendar</div></a>
+      <a href="#" class="resource-card"><div class="r-icon">📩</div><div class="r-label">Outreach Templates</div></a>
+      <a href="#" class="resource-card"><div class="r-icon">📝</div><div class="r-label">Content Brief</div></a>
+      <a href="#" class="resource-card"><div class="r-icon">🎬</div><div class="r-label">Script Templates</div></a>
+      <a href="#" class="resource-card"><div class="r-icon">#️⃣</div><div class="r-label">Hashtag Bank</div></a>
+      <a href="#" class="resource-card"><div class="r-icon">🤳</div><div class="r-label">Story Templates</div></a>
+    </div>
+  </section>
 
-        <section class="card space-y-4">
-            <div class="flex items-center justify-between flex-wrap gap-4">
-                <h2 contenteditable="true" id="calTitle" class="text-2xl font-bold">Content & Script Tracker</h2>
-            </div>
-            <div class="overflow-x-auto">
-                <table id="calendarTable">
-                    <thead>
-                        <tr>
-                            <th class="w-16">Day</th>
-                            <th class="w-32">Format</th>
-                            <th class="w-auto">Hook / Idea</th>
-                            <th class="w-32">Status</th>
-                            <th class="w-24 text-center">Script Done</th>
-                            <th class="w-24 text-center">Post Published</th>
-                            <th class="w-10 no-print"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="calendarBody">
-                        </tbody>
-                </table>
-            </div>
-            <button onclick="addCalendarRow()" class="btn-secondary no-print">+ Add Content Row</button>
-        </section>
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-actions">
+      <button class="btn btn-accent" onclick="exportData()">📤 Export All Data</button>
+      <button class="btn btn-ghost" onclick="sharePlan()">🔗 Share Plan</button>
+    </div>
+    <p>All data auto-saves to your browser. Press <kbd style="background:var(--surface2);padding:2px 8px;border-radius:4px;">Ctrl+S</kbd> to force save.</p>
+  </footer>
 
-        <section class="card space-y-4">
-            <div class="flex items-center justify-between flex-wrap gap-4">
-                <h2 contenteditable="true" id="infTitle" class="text-2xl font-bold">Influencer Collab & Insta IDs</h2>
-            </div>
-            <div class="overflow-x-auto">
-                <table id="influencerTable">
-                    <thead>
-                        <tr>
-                            <th class="w-48">Influencer Name</th>
-                            <th class="w-48">Instagram ID</th>
-                            <th class="w-48">Niche / Audience</th>
-                            <th class="w-32">Status</th>
-                            <th class="w-24 text-center">Collab Done</th>
-                            <th class="w-10 no-print"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="influencerBody">
-                        </tbody>
-                </table>
-            </div>
-            <button onclick="addInfluencerRow()" class="btn-secondary no-print">+ Add Influencer</button>
-        </section>
+</main>
 
-        <section class="space-y-4">
-            <h2 contenteditable="true" id="notesTitle" class="text-2xl font-bold">Ideas, Feedback & To-Dos</h2>
-            <div id="notesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                </div>
-            <button onclick="addNote()" class="btn-primary no-print w-full md:w-auto">📝 Add New Sticky Note</button>
-        </section>
+<!-- QUICK ADD MODAL -->
+<div id="quickAddModal" class="modal-bg">
+  <div class="modal">
+    <h3>+ Quick Add Content</h3>
+    <div class="form-group">
+      <label class="form-label">Hook / Topic</label>
+      <input id="qaTopic" class="form-input" placeholder="What's the hook?">
+    </div>
+    <div class="form-grid2">
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select id="qaType" class="form-input">
+          <option>Reel</option><option>Carousel</option><option>Story</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Account</label>
+        <select id="qaAccount" class="form-input">
+          <option>@fiwe.social</option><option>New Account</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Day (1-15)</label>
+      <input id="qaDay" class="form-input" type="number" min="1" max="15" placeholder="e.g. 3">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-accent" onclick="submitQuickAdd()">Add to Plan</button>
+    </div>
+  </div>
+</div>
 
-    </main>
+<!-- TOAST -->
+<div id="toast">✅ Saved!</div>
 
-    <script>
-        // --- DEFAULT DATA (If opening for the first time) ---
-        const defaultCalendar = [
-            { id: 1, day: 'Day 1', format: 'Talking Head Reel', hook: 'Hook idea goes here...', status: 'Drafting', scriptDone: false, postDone: false },
-            { id: 2, day: 'Day 2', format: 'B-Roll with Text', hook: 'Another hook idea...', status: 'Ready to Shoot', scriptDone: true, postDone: false }
-        ];
+<script>
+// ═══════════════════════════════════════════
+// DEFAULT DATA
+// ═══════════════════════════════════════════
 
-        const defaultInfluencers = [
-            { id: 1, name: 'Rahul Sharma', instaId: '@rahul.marketer', niche: 'Business', status: 'Contacted', done: false },
-            { id: 2, name: 'Priya Singh', instaId: '@priyacreates', niche: 'Lifestyle', status: 'Agreed', done: false }
-        ];
+const defaultCalendar = [
+  { day:1, week:1, account:'@fiwe.social', type:'Reel', format:'Talking Head', hook:'Problem Fiwe solves', cta:'Download', status:'Planned', done:false },
+  { day:1, week:1, account:'New Account', type:'Reel', format:'Faceless B-roll', hook:'Aesthetic intro to concept', cta:'Follow', status:'Planned', done:false },
+  { day:2, week:1, account:'@fiwe.social', type:'Reel', format:'POV', hook:'POV: You just joined Fiwe', cta:'Download', status:'Planned', done:false },
+  { day:2, week:1, account:'New Account', type:'Reel', format:'Trending Audio', hook:'Trending sound + app teaser', cta:'Follow', status:'Planned', done:false },
+  { day:3, week:1, account:'@fiwe.social', type:'Carousel', format:'Educational', hook:'5 steps to find your tribe', cta:'Save', status:'Planned', done:false },
+  { day:3, week:1, account:'New Account', type:'Reel', format:'Screen Record', hook:'App walkthrough', cta:'Download', status:'Planned', done:false },
+  { day:4, week:1, account:'@fiwe.social', type:'Reel', format:'Talking Head', hook:'Why DMs don\'t work anymore', cta:'Download', status:'Planned', done:false },
+  { day:4, week:1, account:'New Account', type:'Reel', format:'Faceless', hook:'Find people like you', cta:'Follow', status:'Planned', done:false },
+  { day:5, week:1, account:'@fiwe.social', type:'Reel', format:'Duet/Collab', hook:'Influencer collab drop', cta:'Download', status:'Planned', done:false },
+  { day:5, week:1, account:'New Account', type:'Reel', format:'Trending', hook:'Viral audio + Fiwe reveal', cta:'Follow', status:'Planned', done:false },
+  { day:6, week:1, account:'@fiwe.social', type:'Carousel', format:'Value List', hook:'10 communities you can join today', cta:'Save', status:'Planned', done:false },
+  { day:6, week:1, account:'New Account', type:'Reel', format:'Text-on-screen', hook:'The loneliness problem solved', cta:'Download', status:'Planned', done:false },
+  { day:7, week:1, account:'@fiwe.social', type:'Reel', format:'Talking Head', hook:'Week 1 behind-the-scenes', cta:'Engage', status:'Planned', done:false },
+  { day:7, week:1, account:'New Account', type:'Reel', format:'Montage', hook:'Real users, real connections', cta:'Download', status:'Planned', done:false },
+  { day:8, week:2, account:'@fiwe.social', type:'Reel', format:'Talking Head', hook:'What our first 1000 users said', cta:'Download', status:'Planned', done:false },
+  { day:8, week:2, account:'New Account', type:'Reel', format:'Faceless', hook:'This app changed my social life', cta:'Download', status:'Planned', done:false },
+  { day:9, week:2, account:'@fiwe.social', type:'Reel', format:'Interview', hook:'User testimonial – real story', cta:'Share', status:'Planned', done:false },
+  { day:9, week:2, account:'New Account', type:'Reel', format:'Screen Record', hook:'How to use the discovery feed', cta:'Download', status:'Planned', done:false },
+  { day:10, week:2, account:'@fiwe.social', type:'Reel', format:'Collab Drop', hook:'Influencer feature live', cta:'Download', status:'Planned', done:false },
+  { day:10, week:2, account:'New Account', type:'Reel', format:'Trending', hook:'POV: Finally a platform that gets me', cta:'Follow', status:'Planned', done:false },
+  { day:11, week:2, account:'@fiwe.social', type:'Carousel', format:'Case Study', hook:'From 0 to first community – real story', cta:'Save', status:'Planned', done:false },
+  { day:11, week:2, account:'New Account', type:'Reel', format:'Talking Head', hook:'Stop doomscrolling, start connecting', cta:'Download', status:'Planned', done:false },
+  { day:12, week:2, account:'@fiwe.social', type:'Reel', format:'Tutorial', hook:'3 features no one uses but should', cta:'Download', status:'Planned', done:false },
+  { day:12, week:2, account:'New Account', type:'Reel', format:'Faceless', hook:'Fiwe vs other apps comparison', cta:'Download', status:'Planned', done:false },
+  { day:13, week:2, account:'@fiwe.social', type:'Reel', format:'Collab Drop', hook:'Mega influencer reveal', cta:'Download', status:'Planned', done:false },
+  { day:13, week:2, account:'New Account', type:'Reel', format:'Trending Audio', hook:'Day 13 viral push', cta:'Follow', status:'Planned', done:false },
+  { day:14, week:2, account:'@fiwe.social', type:'Reel', format:'Talking Head', hook:'Almost at goal – community update', cta:'Share', status:'Planned', done:false },
+  { day:14, week:2, account:'New Account', type:'Reel', format:'Montage', hook:'2000 users in 2 weeks', cta:'Download', status:'Planned', done:false },
+  { day:15, week:2, account:'@fiwe.social', type:'Reel', format:'Celebration', hook:'Launch milestone celebration', cta:'Download', status:'Planned', done:false },
+  { day:15, week:2, account:'New Account', type:'Reel', format:'Celebration', hook:'Final push – join today', cta:'Download', status:'Planned', done:false },
+];
 
-        const defaultNotes = [
-            { id: 1, title: 'Urgent Fixes', text: 'Ensure lighting is better in next reel.', color: 'border-red-300' },
-            { id: 2, title: 'Ideas for Next Week', text: 'Reach out to micro-influencers under 10k followers.', color: 'border-yellow-300' }
-        ];
+const defaultInfluencers = [
+  { id:1, name:'TechTina', instaId:'@techtina.in', niche:'Productivity', followers:'15k', reelLink:'', price:1500, status:'Agreed', downloads:120 },
+  { id:2, name:'SocialSam', instaId:'@socialsam_', niche:'Community', followers:'22k', reelLink:'', price:2000, status:'Contacted', downloads:0 },
+  { id:3, name:'FitFreya', instaId:'@fitfreya.daily', niche:'Fitness', followers:'18k', reelLink:'', price:1800, status:'Contacted', downloads:0 },
+];
 
-        // --- LOCAL STORAGE STATE MANAGEMENT ---
-        let state = {
-            calendar: JSON.parse(localStorage.getItem('wk_cal')) || defaultCalendar,
-            influencers: JSON.parse(localStorage.getItem('wk_inf')) || defaultInfluencers,
-            notes: JSON.parse(localStorage.getItem('wk_notes')) || defaultNotes,
-            editableTexts: JSON.parse(localStorage.getItem('wk_texts')) || {},
-            darkMode: localStorage.getItem('wk_dark') === 'true'
-        };
+const defaultCarousels = [
+  { id:1, title:'Find Your Tribe on Fiwe', slides:7, status:'Designing', link:'', saves:0, shares:0 },
+  { id:2, title:'Why Interest-Based > Follower-Based', slides:5, status:'Not Started', link:'', saves:0, shares:0 },
+  { id:3, title:'Launch Week Feature Tour', slides:10, status:'Not Started', link:'', saves:0, shares:0 },
+];
 
-        const saveState = () => {
-            localStorage.setItem('wk_cal', JSON.stringify(state.calendar));
-            localStorage.setItem('wk_inf', JSON.stringify(state.influencers));
-            localStorage.setItem('wk_notes', JSON.stringify(state.notes));
-            localStorage.setItem('wk_texts', JSON.stringify(state.editableTexts));
-            calculateDashboard();
-        };
+const defaultStats = { scriptsTotal:30, scriptsDone:0, postsTotal:30, postsDone:0, influencersTarget:7, influencersFound:0, idsTarget:20, idsCollected:0, downloads:0, reach:0 };
 
-        // --- GLOBAL CONTENT-EDITABLE TEXTS ---
-        const initEditableTexts = () => {
-            document.querySelectorAll('[contenteditable="true"]').forEach(el => {
-                // Load saved text
-                if(state.editableTexts[el.id]) {
-                    el.innerHTML = state.editableTexts[el.id];
-                }
-                // Save text on change
-                el.addEventListener('input', () => {
-                    state.editableTexts[el.id] = el.innerHTML;
-                    saveState();
-                });
-            });
-        };
+const defaultStickies = [
+  { id: Date.now()-100, text: '🚀 Launch push Day 5: Boost best-performing reel with ₹500 ads', color:'purple', date: new Date().toLocaleDateString('en-IN') },
+  { id: Date.now()-50, text: '💡 Idea: Create a "before Fiwe" vs "after Fiwe" reel format', color:'yellow', date: new Date().toLocaleDateString('en-IN') },
+];
 
-        // --- RENDER DASHBOARD METRICS ---
-        const calculateDashboard = () => {
-            let scriptsDone = state.calendar.filter(c => c.scriptDone).length;
-            let postsDone = state.calendar.filter(c => c.postDone).length;
-            let infTotal = state.influencers.length;
-            let collabsDone = state.influencers.filter(i => i.done).length;
+// ═══════════════════════════════════════════
+// STATE (localStorage backed)
+// ═══════════════════════════════════════════
+const load = (key, def) => { try { return JSON.parse(localStorage.getItem(key)) || def; } catch { return def; } };
+const save = (key, val) => localStorage.setItem(key, JSON.stringify(val));
 
-            document.getElementById('metricScripts').innerText = scriptsDone;
-            document.getElementById('metricPosts').innerText = postsDone;
-            document.getElementById('metricInfFound').innerText = infTotal;
-            document.getElementById('metricCollabs').innerText = collabsDone;
-        };
+let state = {
+  calendar: load('fw_calendar', defaultCalendar),
+  influencers: load('fw_influencers', defaultInfluencers),
+  carousels: load('fw_carousels', defaultCarousels),
+  stats: load('fw_stats', defaultStats),
+  stickies: load('fw_stickies', defaultStickies),
+};
 
-        // --- RENDER CONTENT CALENDAR ---
-        const renderCalendar = () => {
-            const tbody = document.getElementById('calendarBody');
-            tbody.innerHTML = '';
-            
-            state.calendar.forEach((item, i) => {
-                tbody.innerHTML += `
-                    <tr class="${item.postDone ? 'bg-green-50/50 dark:bg-green-900/10' : ''}">
-                        <td><input type="text" value="${item.day}" oninput="updateCal(${i}, 'day', this.value)" class="editable-input font-bold text-center"></td>
-                        <td><input type="text" value="${item.format}" oninput="updateCal(${i}, 'format', this.value)" class="editable-input text-sm"></td>
-                        <td><textarea rows="1" oninput="updateCal(${i}, 'hook', this.value)" class="editable-input font-medium text-sm resize-none overflow-hidden" onkeyup="this.style.height='auto'; this.style.height=(this.scrollHeight)+'px';">${item.hook}</textarea></td>
-                        <td><input type="text" value="${item.status}" oninput="updateCal(${i}, 'status', this.value)" class="editable-input text-sm text-center bg-gray-100 dark:bg-gray-800 rounded"></td>
-                        <td class="text-center">
-                            <input type="checkbox" ${item.scriptDone ? 'checked':''} onchange="updateCal(${i}, 'scriptDone', this.checked)" class="w-5 h-5 rounded accent-blue-500 cursor-pointer">
-                        </td>
-                        <td class="text-center">
-                            <input type="checkbox" ${item.postDone ? 'checked':''} onchange="updateCal(${i}, 'postDone', this.checked)" class="w-5 h-5 rounded accent-brand-primary cursor-pointer">
-                        </td>
-                        <td class="text-right no-print">
-                            <button onclick="deleteItem('calendar', ${i})" class="text-red-400 hover:text-red-600 font-bold px-2 text-lg">×</button>
-                        </td>
-                    </tr>
-                `;
-            });
-            calculateDashboard();
-        };
+let stickyColor = 'yellow';
 
-        const updateCal = (i, key, val) => {
-            state.calendar[i][key] = val;
-            saveState();
-            if(key === 'postDone') renderCalendar(); // Re-render for row color change
-        };
-        const addCalendarRow = () => { 
-            state.calendar.push({day: 'Day X', format: '', hook: '', status: 'Planned', scriptDone: false, postDone: false}); 
-            saveState(); renderCalendar(); 
-        };
+const saveAll = () => {
+  save('fw_calendar', state.calendar);
+  save('fw_influencers', state.influencers);
+  save('fw_carousels', state.carousels);
+  save('fw_stats', state.stats);
+  save('fw_stickies', state.stickies);
+};
 
-        // --- RENDER INFLUENCERS ---
-        const renderInfluencers = () => {
-            const tbody = document.getElementById('influencerBody');
-            tbody.innerHTML = '';
+// ═══════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════
+let toastTimer;
+const toast = (msg='✅ Saved!') => {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+};
 
-            state.influencers.forEach((inf, i) => {
-                tbody.innerHTML += `
-                    <tr class="${inf.done ? 'bg-brand-accent/10' : ''}">
-                        <td><input type="text" value="${inf.name}" oninput="updateInf(${i}, 'name', this.value)" class="editable-input font-semibold"></td>
-                        <td><input type="text" value="${inf.instaId}" oninput="updateInf(${i}, 'instaId', this.value)" class="editable-input text-brand-primary font-medium"></td>
-                        <td><input type="text" value="${inf.niche}" oninput="updateInf(${i}, 'niche', this.value)" class="editable-input text-sm"></td>
-                        <td><input type="text" value="${inf.status}" oninput="updateInf(${i}, 'status', this.value)" class="editable-input text-sm text-center bg-gray-100 dark:bg-gray-800 rounded"></td>
-                        <td class="text-center">
-                            <input type="checkbox" ${inf.done ? 'checked':''} onchange="updateInf(${i}, 'done', this.checked)" class="w-5 h-5 rounded accent-brand-accent cursor-pointer">
-                        </td>
-                        <td class="text-right no-print">
-                            <button onclick="deleteItem('influencers', ${i})" class="text-red-400 hover:text-red-600 font-bold px-2 text-lg">×</button>
-                        </td>
-                    </tr>
-                `;
-            });
-            calculateDashboard();
-        };
+// ═══════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════
+const renderDash = () => {
+  const s = state.stats;
+  const cal = state.calendar;
+  const scriptsDone = cal.filter(i => i.type === 'Reel' && i.status !== 'Planned').length;
+  const postsDone = cal.filter(i => i.done).length;
+  const infFound = state.influencers.filter(i => i.status !== 'Contacted').length;
+  const idsCollected = state.influencers.length;
 
-        const updateInf = (i, key, val) => {
-            state.influencers[i][key] = val;
-            saveState();
-            if(key === 'done') renderInfluencers();
-        };
-        const addInfluencerRow = () => {
-            state.influencers.push({name: '', instaId: '@', niche: '', status: 'Finding', done: false});
-            saveState(); renderInfluencers();
-        };
+  const items = [
+    { num: `${scriptsDone}/${cal.filter(i=>i.type==='Reel').length}`, label:'Scripts Done', sub:'Reels scripted & in progress', color:'var(--accent)', pct: cal.filter(i=>i.type==='Reel').length > 0 ? scriptsDone/cal.filter(i=>i.type==='Reel').length*100 : 0 },
+    { num: `${postsDone}/${cal.length}`, label:'Posts Published', sub:'Across both accounts', color:'var(--accent2)', pct: cal.length > 0 ? postsDone/cal.length*100 : 0 },
+    { num: `${infFound}/${state.influencers.length}`, label:'Influencers Confirmed', sub:'Agreed / Content received / Posted', color:'var(--accent3)', pct: state.influencers.length > 0 ? infFound/state.influencers.length*100 : 0 },
+    { num: `${idsCollected}`, label:'Influencer IDs Added', sub:'Instagram profiles in tracker', color:'var(--accent4)', pct: Math.min(idsCollected/7*100, 100) },
+    { num: `${state.influencers.reduce((s,i)=>s+i.downloads,0).toLocaleString()}`, label:'Downloads (Influencer)', sub:'Via influencer collabs', color:'var(--accent)', pct: Math.min(state.influencers.reduce((s,i)=>s+i.downloads,0)/3500*100,100) },
+    { num: `₹${state.influencers.reduce((s,i)=>s+i.price,0).toLocaleString()}`, label:'Total Spent', sub:'Influencer payments', color:'var(--accent2)', pct: 0, noPct: true },
+  ];
 
-        // --- RENDER STICKY NOTES ---
-        const renderNotes = () => {
-            const grid = document.getElementById('notesGrid');
-            grid.innerHTML = '';
+  const grid = document.getElementById('dashGrid');
+  grid.innerHTML = items.map(it => `
+    <div class="dash-stat">
+      <div class="stat-glow" style="background:${it.color}"></div>
+      <div class="stat-num" style="color:${it.color}">${it.num}</div>
+      <div class="stat-label">${it.label}</div>
+      <div class="stat-sub">${it.sub}</div>
+      ${!it.noPct ? `<div class="stat-bar"><div class="stat-bar-fill" style="width:${it.pct.toFixed(0)}%;background:${it.color}"></div></div>` : ''}
+    </div>
+  `).join('');
+};
 
-            const colors = ['border-blue-300', 'border-yellow-300', 'border-green-300', 'border-purple-300', 'border-red-300'];
+// ═══════════════════════════════════════════
+// CALENDAR
+// ═══════════════════════════════════════════
+const renderCalendar = () => {
+  const acc = document.getElementById('filterAccount').value;
+  const typ = document.getElementById('filterType').value;
+  const q = document.getElementById('globalSearch').value.toLowerCase();
 
-            state.notes.forEach((note, i) => {
-                grid.innerHTML += `
-                    <div class="sticky-note border-t-4 ${note.color || colors[0]} shadow-md">
-                        <button onclick="deleteItem('notes', ${i})" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition no-print font-bold">✕</button>
-                        <input type="text" value="${note.title}" oninput="updateNote(${i}, 'title', this.value)" placeholder="Note Title..." class="bg-transparent font-bold outline-none border-b border-transparent focus:border-gray-300 pb-1">
-                        <textarea rows="4" oninput="updateNote(${i}, 'text', this.value)" placeholder="Type your ideas, feedback, or to-do lists here..." class="bg-transparent outline-none text-sm resize-none mt-2 w-full h-full">${note.text}</textarea>
-                    </div>
-                `;
-            });
-        };
+  let data = state.calendar.filter(i =>
+    (!acc || i.account === acc) &&
+    (!typ || i.type === typ) &&
+    (!q || i.hook.toLowerCase().includes(q) || i.format.toLowerCase().includes(q))
+  ).sort((a,b) => a.day - b.day);
 
-        const updateNote = (i, key, val) => {
-            state.notes[i][key] = val;
-            saveState();
-        };
-        const addNote = () => {
-            const colors = ['border-blue-400', 'border-yellow-400', 'border-green-400', 'border-purple-400', 'border-red-400'];
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            state.notes.push({title: '', text: '', color: randomColor});
-            saveState(); renderNotes();
-        };
+  const tbody = document.getElementById('calendarBody');
+  tbody.innerHTML = '';
 
-        // --- UTILS ---
-        const deleteItem = (arrayName, index) => {
-            state[arrayName].splice(index, 1);
-            saveState();
-            if(arrayName === 'calendar') renderCalendar();
-            if(arrayName === 'influencers') renderInfluencers();
-            if(arrayName === 'notes') renderNotes();
-        };
+  data.forEach((item, idx) => {
+    const realIdx = state.calendar.indexOf(item);
+    const statusPill = { Planned:'sp-planned', 'In Progress':'sp-progress', Complete:'sp-complete', Published:'sp-published' }[item.status] || 'sp-planned';
+    const tr = document.createElement('tr');
+    if(item.done) tr.classList.add('done-row');
+    tr.innerHTML = `
+      <td><span class="day-badge ${item.week===2?'w2':''}">${item.day}</span></td>
+      <td style="font-size:0.8rem;color:var(--muted)">${item.account}</td>
+      <td style="font-weight:600">${item.type}</td>
+      <td style="color:var(--muted);font-size:0.82rem">${item.format}</td>
+      <td><input class="table-input" value="${item.hook}" onchange="updateCal(${realIdx},'hook',this.value)" style="min-width:140px"></td>
+      <td style="font-size:0.78rem;font-weight:600;color:var(--accent3)">${item.cta}</td>
+      <td>
+        <select class="table-sel" onchange="updateCal(${realIdx},'status',this.value)">
+          <option ${item.status==='Planned'?'selected':''}>Planned</option>
+          <option ${item.status==='In Progress'?'selected':''}>In Progress</option>
+          <option ${item.status==='Complete'?'selected':''}>Complete</option>
+          <option ${item.status==='Published'?'selected':''}>Published</option>
+        </select>
+      </td>
+      <td class="check-wrap"><input type="checkbox" class="big-check" ${item.done?'checked':''} onchange="toggleCalDone(${realIdx})"></td>
+    `;
+    tbody.appendChild(tr);
+  });
 
-        // Dark Mode Setup
-        const toggleDarkMode = () => {
-            state.darkMode = !state.darkMode;
-            localStorage.setItem('wk_dark', state.darkMode);
-            applyDarkMode();
-        };
-        const applyDarkMode = () => {
-            if (state.darkMode) {
-                document.documentElement.classList.add('dark');
-                document.getElementById('themeIcon').innerText = '☀️';
-            } else {
-                document.documentElement.classList.remove('dark');
-                document.getElementById('themeIcon').innerText = '🌙';
-            }
-        };
+  // Progress bar
+  const totalReels = state.calendar.filter(i=>i.type==='Reel').length;
+  const doneReels = state.calendar.filter(i=>i.type==='Reel'&&i.done).length;
+  const pct = totalReels > 0 ? (doneReels/totalReels*100).toFixed(0) : 0;
+  document.getElementById('reelProgFill').style.width = pct+'%';
+  document.getElementById('reelProgLabel').textContent = `${doneReels}/${totalReels} Reels Published`;
+};
 
-        // Adjust textareas initially
-        setTimeout(() => {
-            document.querySelectorAll('textarea').forEach(el => {
-                el.style.height = 'auto';
-                el.style.height = (el.scrollHeight) + 'px';
-            });
-        }, 100);
+const updateCal = (idx, key, val) => {
+  state.calendar[idx][key] = val;
+  if(key==='status' && val==='Published') state.calendar[idx].done = true;
+  saveAll();
+  if(key==='status') renderCalendar();
+  renderDash();
+  toast('Saved!');
+};
 
-        // INITIALIZE ALL
-        initEditableTexts();
-        applyDarkMode();
-        renderCalendar();
-        renderInfluencers();
-        renderNotes();
+const toggleCalDone = (idx) => {
+  state.calendar[idx].done = !state.calendar[idx].done;
+  if(state.calendar[idx].done && state.calendar[idx].status !== 'Published') state.calendar[idx].status = 'Complete';
+  saveAll();
+  renderCalendar();
+  renderDash();
+  checkCompletion();
+};
 
-    </script>
+// ═══════════════════════════════════════════
+// INFLUENCERS
+// ═══════════════════════════════════════════
+const renderInfluencers = () => {
+  const tbody = document.getElementById('influencerBody');
+  tbody.innerHTML = '';
+  state.influencers.forEach((inf, idx) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input class="table-input" value="${inf.name}" onchange="updateInf(${idx},'name',this.value)" style="min-width:100px"></td>
+      <td><input class="table-input" value="${inf.instaId||''}" placeholder="@handle" onchange="updateInf(${idx},'instaId',this.value)" style="color:var(--accent);min-width:110px"></td>
+      <td><input class="table-input" value="${inf.niche}" onchange="updateInf(${idx},'niche',this.value)"></td>
+      <td><input class="table-input" value="${inf.followers}" onchange="updateInf(${idx},'followers',this.value)" style="width:60px"></td>
+      <td>
+        ${inf.reelLink ? `<a href="${inf.reelLink}" target="_blank" class="inf-link" style="font-size:0.8rem">🔗 View</a>` : ''}
+        <input class="table-input" value="${inf.reelLink||''}" placeholder="Paste reel URL" onchange="updateInf(${idx},'reelLink',this.value)" style="font-size:0.75rem;color:var(--muted);min-width:120px">
+      </td>
+      <td style="color:var(--accent2);font-weight:700">₹<input class="table-input" type="number" value="${inf.price}" onchange="updateInf(${idx},'price',parseFloat(this.value)||0)" style="width:70px;color:var(--accent2)"></td>
+      <td>
+        <select class="table-sel" onchange="updateInf(${idx},'status',this.value)">
+          <option ${inf.status==='Contacted'?'selected':''}>Contacted</option>
+          <option ${inf.status==='Agreed'?'selected':''}>Agreed</option>
+          <option ${inf.status==='Content Received'?'selected':''}>Content Received</option>
+          <option ${inf.status==='Posted'?'selected':''}>Posted</option>
+        </select>
+      </td>
+      <td style="color:var(--accent3);font-weight:700"><input class="table-input" type="number" value="${inf.downloads}" onchange="updateInf(${idx},'downloads',parseInt(this.value)||0)" style="width:60px;color:var(--accent3)"></td>
+      <td><button onclick="deleteInf(${idx})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.8rem;padding:4px 8px;border-radius:6px;transition:color 0.15s" onmouseover="this.style.color='var(--accent2)'" onmouseout="this.style.color='var(--muted)'">✕ Delete</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  const total = state.influencers.reduce((s,i)=>s+i.price,0);
+  document.getElementById('totalSpent').textContent = '₹'+total.toLocaleString();
+};
+
+const updateInf = (idx, key, val) => {
+  state.influencers[idx][key] = val;
+  saveAll();
+  renderInfluencers();
+  renderDash();
+  toast('Saved!');
+};
+const addInfluencer = () => {
+  state.influencers.push({ id:Date.now(), name:'New Influencer', instaId:'@handle', niche:'', followers:'0', reelLink:'', price:0, status:'Contacted', downloads:0 });
+  saveAll();
+  renderInfluencers();
+  renderDash();
+};
+const deleteInf = (idx) => {
+  if(!confirm('Delete this influencer?')) return;
+  state.influencers.splice(idx, 1);
+  saveAll();
+  renderInfluencers();
+  renderDash();
+  toast('Deleted!');
+};
+
+// ═══════════════════════════════════════════
+// CAROUSELS
+// ═══════════════════════════════════════════
+const renderCarousels = () => {
+  const container = document.getElementById('carouselContainer');
+  container.innerHTML = '';
+  state.carousels.forEach((c, idx) => {
+    const statusColor = { 'Not Started':'var(--muted)', 'Designing':'var(--accent4)', 'Complete':'var(--accent3)' }[c.status] || 'var(--muted)';
+    const el = document.createElement('div');
+    el.className = 'carousel-card';
+    el.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;">
+        <input type="text" value="${c.title}" onchange="updateCar(${idx},'title',this.value)" style="font-weight:600;font-size:0.95rem">
+        <select class="table-sel" onchange="updateCar(${idx},'status',this.value)" style="color:${statusColor}">
+          <option ${c.status==='Not Started'?'selected':''}>Not Started</option>
+          <option ${c.status==='Designing'?'selected':''}>Designing</option>
+          <option ${c.status==='Complete'?'selected':''}>Complete</option>
+        </select>
+      </div>
+      <div style="font-size:0.78rem;color:var(--muted);margin-bottom:10px">${c.slides} slides</div>
+      <input type="text" value="${c.link||''}" placeholder="Paste Canva link..." onchange="updateCar(${idx},'link',this.value)" style="font-size:0.78rem;color:var(--accent);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 10px;width:100%;outline:none;margin-bottom:0">
+      <div class="metric-row">
+        <div class="metric-mini">Saves<span><input type="number" value="${c.saves}" onchange="updateCar(${idx},'saves',parseInt(this.value)||0)" style="background:transparent;border:none;color:var(--text);font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;width:60px;outline:none"></span></div>
+        <div class="metric-mini">Shares<span><input type="number" value="${c.shares}" onchange="updateCar(${idx},'shares',parseInt(this.value)||0)" style="background:transparent;border:none;color:var(--text);font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;width:60px;outline:none"></span></div>
+      </div>
+    `;
+    container.appendChild(el);
+  });
+};
+const updateCar = (idx, key, val) => {
+  state.carousels[idx][key] = val;
+  saveAll();
+  if(key==='status') renderCarousels();
+  toast('Saved!');
+};
+
+// ═══════════════════════════════════════════
+// STATS GRID (editable counters)
+// ═══════════════════════════════════════════
+const renderStats = () => {
+  const grid = document.getElementById('statsGrid');
+  const statDefs = [
+    { key:'downloads', label:'Total Downloads', color:'var(--accent)', prefix:'' },
+    { key:'reach', label:'Total Reach', color:'var(--accent2)', prefix:'' },
+  ];
+  grid.innerHTML = statDefs.map(s => `
+    <div class="dash-stat" style="grid-column:span 1">
+      <div class="stat-glow" style="background:${s.color}"></div>
+      <label style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;display:block;margin-bottom:6px">${s.label}</label>
+      <input type="number" value="${state.stats[s.key]||0}" 
+        onchange="state.stats['${s.key}']=parseInt(this.value)||0;saveAll();renderDash();toast('Saved!')"
+        style="background:transparent;border:none;color:${s.color};font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;width:100%;outline:none">
+    </div>
+  `).join('');
+};
+
+// ═══════════════════════════════════════════
+// STICKY NOTES
+// ═══════════════════════════════════════════
+const selectColor = (el) => {
+  document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  stickyColor = el.dataset.color;
+};
+
+const addSticky = () => {
+  const text = document.getElementById('stickyInput').value.trim();
+  if(!text) return;
+  state.stickies.push({ id:Date.now(), text, color:stickyColor, date:new Date().toLocaleDateString('en-IN') });
+  saveAll();
+  renderStickies();
+  document.getElementById('stickyInput').value = '';
+  toast('Note pinned! 📌');
+};
+
+const deleteSticky = (id) => {
+  state.stickies = state.stickies.filter(s=>s.id!==id);
+  saveAll();
+  renderStickies();
+};
+
+const updateStickyText = (id, val) => {
+  const s = state.stickies.find(s=>s.id===id);
+  if(s) s.text = val;
+  saveAll();
+};
+
+const renderStickies = () => {
+  const board = document.getElementById('stickyBoard');
+  board.innerHTML = '';
+  if(state.stickies.length === 0) {
+    board.innerHTML = '<div style="color:var(--muted);font-size:0.9rem;padding:20px">No notes yet. Add your first sticky note above! ☝️</div>';
+    return;
+  }
+  state.stickies.forEach(s => {
+    const el = document.createElement('div');
+    el.className = `sticky color-${s.color}`;
+    el.innerHTML = `
+      <div class="pin-dot"></div>
+      <div class="sticky-date">${s.date}</div>
+      <textarea rows="4" onblur="updateStickyText(${s.id}, this.value)">${s.text}</textarea>
+      <div class="sticky-actions">
+        <span></span>
+        <button class="del-btn" onclick="deleteSticky(${s.id})">✕ Remove</button>
+      </div>
+    `;
+    board.appendChild(el);
+  });
+};
+
+// ═══════════════════════════════════════════
+// QUICK ADD MODAL
+// ═══════════════════════════════════════════
+const openQuickAdd = () => document.getElementById('quickAddModal').classList.add('open');
+const closeModal = () => document.getElementById('quickAddModal').classList.remove('open');
+const submitQuickAdd = () => {
+  const topic = document.getElementById('qaTopic').value.trim();
+  if(!topic) { alert('Enter a topic!'); return; }
+  const day = parseInt(document.getElementById('qaDay').value) || 1;
+  state.calendar.push({ day, week: day>7?2:1, account: document.getElementById('qaAccount').value, type: document.getElementById('qaType').value, format:'Custom', hook:topic, cta:'Engage', status:'Planned', done:false });
+  saveAll();
+  renderCalendar();
+  renderDash();
+  closeModal();
+  document.getElementById('qaTopic').value='';
+  document.getElementById('qaDay').value='';
+  toast('Content added! ✅');
+};
+
+// ═══════════════════════════════════════════
+// COMPLETION CONFETTI
+// ═══════════════════════════════════════════
+const checkCompletion = () => {
+  const total = state.calendar.length;
+  const done = state.calendar.filter(i=>i.done).length;
+  if(total > 0 && done === total) {
+    confetti({ particleCount:200, spread:120, origin:{y:0.6}, colors:['#7c5cfc','#ff5e78','#00e5a0','#ffc94a'] });
+    toast('🎉 All content published! Amazing!');
+  }
+};
+
+// ═══════════════════════════════════════════
+// EXPORT
+// ═══════════════════════════════════════════
+const exportData = () => {
+  const data = JSON.stringify({ calendar: state.calendar, influencers: state.influencers, carousels: state.carousels, stats: state.stats, stickies: state.stickies }, null, 2);
+  const blob = new Blob([data], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'fiwe-tracker-backup.json';
+  a.click();
+  toast('Data exported! 📤');
+};
+const sharePlan = () => {
+  navigator.clipboard.writeText(window.location.href).catch(()=>{});
+  toast('Link copied! 🔗');
+};
+
+// ═══════════════════════════════════════════
+// KEYBOARD SHORTCUTS
+// ═══════════════════════════════════════════
+window.addEventListener('keydown', e => {
+  if(e.ctrlKey && e.key==='s') { e.preventDefault(); saveAll(); toast('Force saved! 💾'); }
+  if(e.ctrlKey && e.key==='f') { e.preventDefault(); document.getElementById('globalSearch').focus(); }
+  if(e.key==='Escape') closeModal();
+});
+
+// ═══════════════════════════════════════════
+// FILTERS & SEARCH
+// ═══════════════════════════════════════════
+document.getElementById('globalSearch').addEventListener('input', renderCalendar);
+document.getElementById('filterAccount').addEventListener('change', renderCalendar);
+document.getElementById('filterType').addEventListener('change', renderCalendar);
+document.getElementById('stickyInput').addEventListener('keydown', e => { if(e.key==='Enter' && (e.ctrlKey||e.metaKey)) addSticky(); });
+document.getElementById('quickAddModal').addEventListener('click', e => { if(e.target===e.currentTarget) closeModal(); });
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+const renderAll = () => {
+  renderDash();
+  renderCalendar();
+  renderInfluencers();
+  renderCarousels();
+  renderStickies();
+  renderStats();
+};
+
+renderAll();
+</script>
 </body>
 </html>
