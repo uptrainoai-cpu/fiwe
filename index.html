@@ -3,11 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>15-Day Content & Meta Ads Tracker</title>
+    <title>Team Content & Influencer Workspace</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <script>
@@ -17,14 +14,14 @@
                 extend: {
                     colors: {
                         brand: {
-                            primary: '#4F46E5', // Indigo
-                            secondary: '#F59E0B', // Amber
-                            accent: '#10B981', // Emerald
-                            bg: '#F3F4F6',
-                            text: '#1F2937',
-                            darkBg: '#111827',
-                            darkCard: '#1F2937',
-                            darkText: '#F9FAFB'
+                            primary: '#6C5CE7',
+                            secondary: '#FF6B6B',
+                            accent: '#00D2A5',
+                            bg: '#F8F9FA',
+                            text: '#2D3748',
+                            darkBg: '#1A202C',
+                            darkCard: '#2D3748',
+                            darkText: '#F7FAFC'
                         }
                     },
                     fontFamily: {
@@ -38,131 +35,124 @@
         body { @apply bg-brand-bg text-brand-text font-sans transition-colors duration-200; }
         .dark body { @apply bg-brand-darkBg text-brand-darkText; }
         
-        .card { @apply bg-white p-6 rounded-2xl shadow-sm border border-gray-200 transition-colors duration-200; }
+        .card { @apply bg-white p-6 rounded-2xl shadow-sm border border-gray-100 transition-colors duration-200; }
         .dark .card { @apply bg-brand-darkCard border-gray-700; }
         
-        .btn-primary { @apply bg-brand-primary text-white px-6 py-3 rounded-xl font-semibold hover:bg-opacity-90 transition flex items-center justify-center gap-2 shadow-md hover:shadow-lg; }
-        .btn-secondary { @apply bg-gray-200 text-brand-text px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition; }
+        .btn-primary { @apply bg-brand-primary text-white px-4 py-2 rounded-xl font-semibold hover:bg-opacity-90 transition; }
+        .btn-secondary { @apply bg-gray-200 text-brand-text px-3 py-1.5 rounded-lg font-medium hover:bg-gray-300 transition text-sm; }
         .dark .btn-secondary { @apply bg-gray-700 text-brand-darkText hover:bg-gray-600; }
 
-        /* Auto-save Editable Text Fields */
-        .editable-text {
-            @apply bg-transparent border border-transparent rounded px-1 py-0.5 w-full transition-colors;
+        /* Seamless Editable Fields */
+        [contenteditable="true"] {
+            @apply outline-none border-b border-transparent transition-colors duration-200 cursor-text;
         }
-        .editable-text:hover { @apply border-gray-300 dark:border-gray-600; }
-        .editable-text:focus { @apply border-brand-primary ring-1 ring-brand-primary outline-none bg-white dark:bg-gray-800; }
-        
-        textarea.editable-text { @apply resize-y min-h-[60px]; }
+        [contenteditable="true"]:hover { @apply border-gray-300 dark:border-gray-500 border-dashed; }
+        [contenteditable="true"]:focus { @apply border-brand-primary border-solid; }
 
-        /* Status Selects */
-        .status-select { @apply bg-transparent border-none text-xs font-bold rounded cursor-pointer p-1 appearance-none focus:ring-0; }
-        .status-planned { @apply text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800; }
-        .status-progress { @apply text-amber-700 bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400; }
-        .status-complete { @apply text-emerald-700 bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400; }
+        .editable-input {
+            @apply w-full bg-transparent border border-transparent rounded px-1 py-0.5 outline-none transition-colors;
+        }
+        .editable-input:hover { @apply border-gray-300 dark:border-gray-600; }
+        .editable-input:focus { @apply ring-1 ring-brand-primary border-brand-primary bg-white dark:bg-gray-800; }
 
-        /* Table */
         table { @apply w-full text-sm text-left border-collapse; }
         th { @apply px-3 py-3 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 uppercase text-xs font-semibold; }
         td { @apply px-3 py-2 border-b border-gray-100 dark:border-gray-700; }
-        tr:hover td { @apply bg-gray-50/50 dark:bg-gray-800/50; }
+        
+        /* Sticky Notes */
+        .sticky-note {
+            @apply p-4 rounded-xl shadow-sm border flex flex-col gap-2 relative group;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        }
+        .dark .sticky-note {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            @apply border-gray-600;
+        }
 
-        /* Progress */
-        .progress-bar-fill { transition: width 0.3s ease-in-out; }
-
-        /* Print */
         @media print {
             body { background: white; color: black; }
             .no-print, nav { display: none !important; }
             .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
-            .editable-text { border: none !important; padding: 0 !important; }
+            [contenteditable="true"] { border: none !important; }
         }
     </style>
 </head>
 <body class="antialiased pb-20">
 
-    <nav class="bg-white/90 dark:bg-brand-darkBg/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700 no-print">
+    <nav class="bg-white/95 dark:bg-brand-darkBg/95 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700 no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-purple-600 flex items-center justify-center text-white font-extrabold text-xl shadow-lg">TCP</div>
+                <div class="w-10 h-10 rounded-xl bg-brand-primary flex items-center justify-center text-white font-extrabold text-xl">W</div>
                 <div>
-                    <h1 class="font-bold text-lg leading-tight">Content & Ads Tracker</h1>
-                    <p class="text-xs text-brand-accent font-medium flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></span> Auto-saving enabled
-                    </p>
+                    <div contenteditable="true" id="navTitle" class="font-bold text-lg leading-tight">Team Workspace</div>
+                    <p class="text-xs text-brand-accent font-medium">Auto-saving active</p>
                 </div>
             </div>
-            <div class="flex items-center gap-4">
-                <button onclick="toggleDarkMode()" class="p-2.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition">
-                    <svg id="moonIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-                    <svg id="sunIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.364 6.364l-.707-.707M15.364 6.364l-.707.707M6.364 15.364l-.707.707M12 5a7 7 0 100 14 7 7 0 000-14z"></path></svg>
-                </button>
-                <button onclick="exportToPDF()" class="btn-primary py-2 px-4 text-sm hidden sm:flex">Export PDF</button>
-            </div>
+            <button onclick="toggleDarkMode()" class="p-2.5 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                <span id="themeIcon">🌙</span>
+            </button>
         </div>
     </nav>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-        <section class="card space-y-4">
-            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-gray-100 dark:border-gray-700 pb-4">
-                <div>
-                    <input type="text" id="adsTitle" value="Meta Ads Performance Tracker" oninput="saveGlobalInput('adsTitle')" class="editable-text text-2xl font-bold bg-transparent">
-                    <p class="text-sm text-gray-500 px-1">Track daily spends, CPA, and conversions.</p>
+        <section class="text-center py-10 bg-white dark:bg-brand-darkCard rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 px-6">
+            <h1 contenteditable="true" id="heroTitle" class="text-4xl md:text-5xl font-extrabold text-brand-text dark:text-brand-darkText mb-4">
+                Master Launch Plan & Tracker
+            </h1>
+            <p contenteditable="true" id="heroSub" class="text-lg text-gray-500 max-w-2xl mx-auto">
+                Track your reels, scripts, influencers, and daily feedback in one editable space. Just click and type anywhere to edit.
+            </p>
+        </section>
+
+        <section class="space-y-4">
+            <h2 contenteditable="true" id="dashTitle" class="text-2xl font-bold">Live Progress Dashboard</h2>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="card flex items-center gap-4 border-l-4 border-blue-500">
+                    <div class="text-3xl">📝</div>
+                    <div>
+                        <div id="metricScripts" class="text-3xl font-black text-blue-600 dark:text-blue-400">0</div>
+                        <div class="text-sm font-medium text-gray-500">Scripts Done</div>
+                    </div>
                 </div>
-                <div class="flex gap-6 items-center">
-                    <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded-xl border border-gray-100 dark:border-gray-700">
-                        <p class="text-xs text-gray-500 font-medium uppercase tracking-wider mb-1">Total Spend</p>
-                        <p id="totalSpendDisplay" class="text-2xl font-black text-brand-primary">₹0</p>
+                <div class="card flex items-center gap-4 border-l-4 border-brand-primary">
+                    <div class="text-3xl">✅</div>
+                    <div>
+                        <div id="metricPosts" class="text-3xl font-black text-brand-primary">0</div>
+                        <div class="text-sm font-medium text-gray-500">Posts Published</div>
+                    </div>
+                </div>
+                <div class="card flex items-center gap-4 border-l-4 border-brand-secondary">
+                    <div class="text-3xl">🔎</div>
+                    <div>
+                        <div id="metricInfFound" class="text-3xl font-black text-brand-secondary">0</div>
+                        <div class="text-sm font-medium text-gray-500">Influencers Found</div>
+                    </div>
+                </div>
+                <div class="card flex items-center gap-4 border-l-4 border-brand-accent">
+                    <div class="text-3xl">🤝</div>
+                    <div>
+                        <div id="metricCollabs" class="text-3xl font-black text-brand-accent">0</div>
+                        <div class="text-sm font-medium text-gray-500">Active Collabs</div>
                     </div>
                 </div>
             </div>
-            
-            <div class="overflow-x-auto">
-                <table id="adsTable">
-                    <thead>
-                        <tr>
-                            <th class="w-48">Campaign Name</th>
-                            <th class="w-40">Ad Set / Audience</th>
-                            <th class="w-24">Daily ₹</th>
-                            <th class="w-24">Spent ₹</th>
-                            <th class="w-24">Conversions</th>
-                            <th class="w-24">CPA (₹)</th>
-                            <th class="w-28">Status</th>
-                            <th class="w-10 no-print"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="adsBody">
-                        </tbody>
-                </table>
-            </div>
-            <button onclick="addAdRow()" class="btn-secondary text-sm no-print">+ Add Campaign</button>
         </section>
 
         <section class="card space-y-4">
-            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-gray-100 dark:border-gray-700 pb-4">
-                <input type="text" id="calTitle" value="15-Day Organic Content Calendar" oninput="saveGlobalInput('calTitle')" class="editable-text text-2xl font-bold w-full md:w-auto">
-                
-                <div class="w-full md:w-64">
-                    <div class="flex justify-between text-xs font-bold mb-1 px-1">
-                        <span>Completion</span>
-                        <span id="calProgressText">0/0</span>
-                    </div>
-                    <div class="h-2.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden border border-gray-200 dark:border-gray-700">
-                        <div id="calProgressBar" class="progress-bar-fill h-full bg-gradient-to-r from-brand-primary to-brand-accent" style="width: 0%"></div>
-                    </div>
-                </div>
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <h2 contenteditable="true" id="calTitle" class="text-2xl font-bold">Content & Script Tracker</h2>
             </div>
-
             <div class="overflow-x-auto">
                 <table id="calendarTable">
                     <thead>
                         <tr>
                             <th class="w-16">Day</th>
                             <th class="w-32">Format</th>
-                            <th class="w-auto">Hook / Topic (Editable)</th>
-                            <th class="w-32">CTA</th>
+                            <th class="w-auto">Hook / Idea</th>
                             <th class="w-32">Status</th>
-                            <th class="w-16 no-print text-center">Done</th>
+                            <th class="w-24 text-center">Script Done</th>
+                            <th class="w-24 text-center">Post Published</th>
                             <th class="w-10 no-print"></th>
                         </tr>
                     </thead>
@@ -170,295 +160,241 @@
                         </tbody>
                 </table>
             </div>
-            <button onclick="addCalendarRow()" class="btn-secondary text-sm no-print">+ Add Content Row</button>
+            <button onclick="addCalendarRow()" class="btn-secondary no-print">+ Add Content Row</button>
         </section>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            
-            <section class="card flex flex-col space-y-4">
-                <input type="text" id="carouselTitle" value="Carousel Posts" oninput="saveGlobalInput('carouselTitle')" class="editable-text text-xl font-bold">
-                <div id="carouselContainer" class="flex-1 space-y-3 overflow-y-auto max-h-[500px] pr-2">
-                    </div>
-                <button onclick="addCarousel()" class="btn-secondary text-sm no-print w-full">+ Add Carousel</button>
-            </section>
+        <section class="card space-y-4">
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <h2 contenteditable="true" id="infTitle" class="text-2xl font-bold">Influencer Collab & Insta IDs</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table id="influencerTable">
+                    <thead>
+                        <tr>
+                            <th class="w-48">Influencer Name</th>
+                            <th class="w-48">Instagram ID</th>
+                            <th class="w-48">Niche / Audience</th>
+                            <th class="w-32">Status</th>
+                            <th class="w-24 text-center">Collab Done</th>
+                            <th class="w-10 no-print"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="influencerBody">
+                        </tbody>
+                </table>
+            </div>
+            <button onclick="addInfluencerRow()" class="btn-secondary no-print">+ Add Influencer</button>
+        </section>
 
-            <section class="card space-y-4">
-                <input type="text" id="notesTitle" value="Daily Learnings & Notes" oninput="saveGlobalInput('notesTitle')" class="editable-text text-xl font-bold">
-                <div id="notesContainer" class="space-y-4 overflow-y-auto max-h-[500px] pr-2">
-                    </div>
-                <button onclick="addNote()" class="btn-secondary text-sm no-print w-full">+ Add Note Block</button>
-            </section>
-        </div>
+        <section class="space-y-4">
+            <h2 contenteditable="true" id="notesTitle" class="text-2xl font-bold">Ideas, Feedback & To-Dos</h2>
+            <div id="notesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                </div>
+            <button onclick="addNote()" class="btn-primary no-print w-full md:w-auto">📝 Add New Sticky Note</button>
+        </section>
 
     </main>
 
     <script>
-        // --- DATA INITIALIZATION ---
-        const defaultAds = [
-            { id: 1, campaign: 'App Installs - Broad', adset: 'Lookalike 1%', daily: 1500, spent: 4500, conversions: 120, status: 'Active' },
-            { id: 2, campaign: 'Retargeting - IG Engagers', adset: 'Last 30 Days', daily: 500, spent: 1000, conversions: 45, status: 'Active' }
-        ];
-
+        // --- DEFAULT DATA (If opening for the first time) ---
         const defaultCalendar = [
-            { id: 1, day: '1', format: 'Reel - Talking Head', hook: '3 reasons why you are losing leads...', cta: 'Save this', status: 'Planned', done: false },
-            { id: 2, day: '1', format: 'Story Sequence', hook: 'Behind the scenes of ad setup', cta: 'Poll', status: 'In Progress', done: false },
-            { id: 3, day: '2', format: 'Reel - B-Roll', hook: 'Stop scrolling if you want growth.', cta: 'Link in Bio', status: 'Planned', done: false }
+            { id: 1, day: 'Day 1', format: 'Talking Head Reel', hook: 'Hook idea goes here...', status: 'Drafting', scriptDone: false, postDone: false },
+            { id: 2, day: 'Day 2', format: 'B-Roll with Text', hook: 'Another hook idea...', status: 'Ready to Shoot', scriptDone: true, postDone: false }
         ];
 
-        const defaultCarousels = [
-            { id: 1, title: '5 Steps to Lower Meta Ads CPA', status: 'Designing', link: '' },
-            { id: 2, title: 'Why organic + paid is the best combo', status: 'Planned', link: '' }
+        const defaultInfluencers = [
+            { id: 1, name: 'Rahul Sharma', instaId: '@rahul.marketer', niche: 'Business', status: 'Contacted', done: false },
+            { id: 2, name: 'Priya Singh', instaId: '@priyacreates', niche: 'Lifestyle', status: 'Agreed', done: false }
         ];
 
         const defaultNotes = [
-            { id: 1, date: 'Day 1 Notes', text: 'Started broad audience testing. CPC is slightly high, will monitor for 48 hours.' }
+            { id: 1, title: 'Urgent Fixes', text: 'Ensure lighting is better in next reel.', color: 'border-red-300' },
+            { id: 2, title: 'Ideas for Next Week', text: 'Reach out to micro-influencers under 10k followers.', color: 'border-yellow-300' }
         ];
 
-        // --- STATE MANAGEMENT ---
+        // --- LOCAL STORAGE STATE MANAGEMENT ---
         let state = {
-            ads: JSON.parse(localStorage.getItem('tcp_ads')) || defaultAds,
-            calendar: JSON.parse(localStorage.getItem('tcp_cal')) || defaultCalendar,
-            carousels: JSON.parse(localStorage.getItem('tcp_carousels')) || defaultCarousels,
-            notes: JSON.parse(localStorage.getItem('tcp_notes')) || defaultNotes,
-            globals: JSON.parse(localStorage.getItem('tcp_globals')) || {},
-            darkMode: localStorage.getItem('tcp_dark') === 'true'
+            calendar: JSON.parse(localStorage.getItem('wk_cal')) || defaultCalendar,
+            influencers: JSON.parse(localStorage.getItem('wk_inf')) || defaultInfluencers,
+            notes: JSON.parse(localStorage.getItem('wk_notes')) || defaultNotes,
+            editableTexts: JSON.parse(localStorage.getItem('wk_texts')) || {},
+            darkMode: localStorage.getItem('wk_dark') === 'true'
         };
 
-        // Deep Save Function
         const saveState = () => {
-            localStorage.setItem('tcp_ads', JSON.stringify(state.ads));
-            localStorage.setItem('tcp_cal', JSON.stringify(state.calendar));
-            localStorage.setItem('tcp_carousels', JSON.stringify(state.carousels));
-            localStorage.setItem('tcp_notes', JSON.stringify(state.notes));
-            localStorage.setItem('tcp_globals', JSON.stringify(state.globals));
-            calculateTotals();
+            localStorage.setItem('wk_cal', JSON.stringify(state.calendar));
+            localStorage.setItem('wk_inf', JSON.stringify(state.influencers));
+            localStorage.setItem('wk_notes', JSON.stringify(state.notes));
+            localStorage.setItem('wk_texts', JSON.stringify(state.editableTexts));
+            calculateDashboard();
         };
 
-        // --- GLOBAL INPUTS (Titles) ---
-        const initGlobals = () => {
-            ['adsTitle', 'calTitle', 'carouselTitle', 'notesTitle'].forEach(id => {
-                if(state.globals[id]) document.getElementById(id).value = state.globals[id];
+        // --- GLOBAL CONTENT-EDITABLE TEXTS ---
+        const initEditableTexts = () => {
+            document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+                // Load saved text
+                if(state.editableTexts[el.id]) {
+                    el.innerHTML = state.editableTexts[el.id];
+                }
+                // Save text on change
+                el.addEventListener('input', () => {
+                    state.editableTexts[el.id] = el.innerHTML;
+                    saveState();
+                });
             });
         };
-        const saveGlobalInput = (id) => {
-            state.globals[id] = document.getElementById(id).value;
-            saveState();
+
+        // --- RENDER DASHBOARD METRICS ---
+        const calculateDashboard = () => {
+            let scriptsDone = state.calendar.filter(c => c.scriptDone).length;
+            let postsDone = state.calendar.filter(c => c.postDone).length;
+            let infTotal = state.influencers.length;
+            let collabsDone = state.influencers.filter(i => i.done).length;
+
+            document.getElementById('metricScripts').innerText = scriptsDone;
+            document.getElementById('metricPosts').innerText = postsDone;
+            document.getElementById('metricInfFound').innerText = infTotal;
+            document.getElementById('metricCollabs').innerText = collabsDone;
         };
 
-        // --- 1. META ADS RENDER ---
-        const renderAds = () => {
-            const tbody = document.getElementById('adsBody');
-            tbody.innerHTML = '';
-            state.ads.forEach((ad, i) => {
-                const cpa = ad.conversions > 0 ? (ad.spent / ad.conversions).toFixed(2) : '0.00';
-                
-                let statusColor = 'status-planned';
-                if(ad.status === 'Active') statusColor = 'status-complete';
-                if(ad.status === 'Paused') statusColor = 'status-progress';
-
-                tbody.innerHTML += `
-                    <tr>
-                        <td><input type="text" value="${ad.campaign}" oninput="updateAd(${i}, 'campaign', this.value)" class="editable-text font-medium"></td>
-                        <td><input type="text" value="${ad.adset}" oninput="updateAd(${i}, 'adset', this.value)" class="editable-text text-sm"></td>
-                        <td><input type="number" value="${ad.daily}" oninput="updateAd(${i}, 'daily', this.value)" class="editable-text"></td>
-                        <td><input type="number" value="${ad.spent}" oninput="updateAd(${i}, 'spent', this.value)" class="editable-text font-bold text-brand-secondary"></td>
-                        <td><input type="number" value="${ad.conversions}" oninput="updateAd(${i}, 'conversions', this.value)" class="editable-text font-bold text-brand-accent"></td>
-                        <td class="font-bold text-gray-700 dark:text-gray-300">₹${cpa}</td>
-                        <td>
-                            <select onchange="updateAd(${i}, 'status', this.value)" class="status-select ${statusColor} w-full">
-                                <option ${ad.status==='Active'?'selected':''}>Active</option>
-                                <option ${ad.status==='Paused'?'selected':''}>Paused</option>
-                                <option ${ad.status==='Draft'?'selected':''}>Draft</option>
-                            </select>
-                        </td>
-                        <td class="text-right no-print"><button onclick="deleteItem('ads', ${i})" class="text-red-400 hover:text-red-600 font-bold px-2">×</button></td>
-                    </tr>
-                `;
-            });
-            calculateTotals();
-        };
-
-        const updateAd = (i, key, val) => {
-            state.ads[i][key] = (key==='daily'||key==='spent'||key==='conversions') ? Number(val) : val;
-            saveState();
-            if(key === 'spent' || key === 'conversions' || key === 'status') renderAds(); // Re-render for math/colors
-        };
-        const addAdRow = () => { state.ads.push({campaign: '', adset: '', daily: 0, spent: 0, conversions: 0, status: 'Draft'}); saveState(); renderAds(); };
-
-        // --- 2. CALENDAR RENDER ---
+        // --- RENDER CONTENT CALENDAR ---
         const renderCalendar = () => {
             const tbody = document.getElementById('calendarBody');
             tbody.innerHTML = '';
             
-            let doneCount = 0;
-
             state.calendar.forEach((item, i) => {
-                if(item.done) doneCount++;
-
-                let sColor = 'status-planned';
-                if(item.status === 'In Progress') sColor = 'status-progress';
-                if(item.status === 'Published') sColor = 'status-complete';
-
                 tbody.innerHTML += `
-                    <tr class="${item.done ? 'opacity-50' : ''}">
-                        <td><input type="text" value="${item.day}" oninput="updateCal(${i}, 'day', this.value)" class="editable-text font-bold text-center"></td>
-                        <td><input type="text" value="${item.format}" oninput="updateCal(${i}, 'format', this.value)" class="editable-text text-sm"></td>
-                        <td><textarea rows="1" oninput="updateCal(${i}, 'hook', this.value)" class="editable-text font-medium text-sm leading-tight">${item.hook}</textarea></td>
-                        <td><input type="text" value="${item.cta}" oninput="updateCal(${i}, 'cta', this.value)" class="editable-text text-sm"></td>
-                        <td>
-                            <select onchange="updateCal(${i}, 'status', this.value)" class="status-select ${sColor} w-full">
-                                <option ${item.status==='Planned'?'selected':''}>Planned</option>
-                                <option ${item.status==='In Progress'?'selected':''}>In Progress</option>
-                                <option ${item.status==='Published'?'selected':''}>Published</option>
-                            </select>
+                    <tr class="${item.postDone ? 'bg-green-50/50 dark:bg-green-900/10' : ''}">
+                        <td><input type="text" value="${item.day}" oninput="updateCal(${i}, 'day', this.value)" class="editable-input font-bold text-center"></td>
+                        <td><input type="text" value="${item.format}" oninput="updateCal(${i}, 'format', this.value)" class="editable-input text-sm"></td>
+                        <td><textarea rows="1" oninput="updateCal(${i}, 'hook', this.value)" class="editable-input font-medium text-sm resize-none overflow-hidden" onkeyup="this.style.height='auto'; this.style.height=(this.scrollHeight)+'px';">${item.hook}</textarea></td>
+                        <td><input type="text" value="${item.status}" oninput="updateCal(${i}, 'status', this.value)" class="editable-input text-sm text-center bg-gray-100 dark:bg-gray-800 rounded"></td>
+                        <td class="text-center">
+                            <input type="checkbox" ${item.scriptDone ? 'checked':''} onchange="updateCal(${i}, 'scriptDone', this.checked)" class="w-5 h-5 rounded accent-blue-500 cursor-pointer">
                         </td>
-                        <td class="text-center no-print">
-                            <input type="checkbox" ${item.done ? 'checked':''} onchange="updateCal(${i}, 'done', this.checked)" class="w-5 h-5 rounded accent-brand-accent cursor-pointer">
+                        <td class="text-center">
+                            <input type="checkbox" ${item.postDone ? 'checked':''} onchange="updateCal(${i}, 'postDone', this.checked)" class="w-5 h-5 rounded accent-brand-primary cursor-pointer">
                         </td>
-                        <td class="text-right no-print"><button onclick="deleteItem('calendar', ${i})" class="text-red-400 hover:text-red-600 font-bold px-2">×</button></td>
+                        <td class="text-right no-print">
+                            <button onclick="deleteItem('calendar', ${i})" class="text-red-400 hover:text-red-600 font-bold px-2 text-lg">×</button>
+                        </td>
                     </tr>
                 `;
             });
-
-            // Update Progress
-            const total = state.calendar.length;
-            const perc = total > 0 ? (doneCount/total)*100 : 0;
-            document.getElementById('calProgressText').innerText = `${doneCount}/${total}`;
-            document.getElementById('calProgressBar').style.width = `${perc}%`;
+            calculateDashboard();
         };
 
         const updateCal = (i, key, val) => {
             state.calendar[i][key] = val;
             saveState();
-            if(key === 'status' || key === 'done') renderCalendar();
+            if(key === 'postDone') renderCalendar(); // Re-render for row color change
         };
-        const addCalendarRow = () => { state.calendar.push({day: '', format: '', hook: '', cta: '', status: 'Planned', done: false}); saveState(); renderCalendar(); };
+        const addCalendarRow = () => { 
+            state.calendar.push({day: 'Day X', format: '', hook: '', status: 'Planned', scriptDone: false, postDone: false}); 
+            saveState(); renderCalendar(); 
+        };
 
-        // --- 3. CAROUSELS RENDER ---
-        const renderCarousels = () => {
-            const container = document.getElementById('carouselContainer');
-            container.innerHTML = '';
-            state.carousels.forEach((c, i) => {
-                let sColor = 'status-planned';
-                if(c.status === 'Designing') sColor = 'status-progress';
-                if(c.status === 'Done') sColor = 'status-complete';
+        // --- RENDER INFLUENCERS ---
+        const renderInfluencers = () => {
+            const tbody = document.getElementById('influencerBody');
+            tbody.innerHTML = '';
 
-                container.innerHTML += `
-                    <div class="p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-gray-700 relative group">
-                        <button onclick="deleteItem('carousels', ${i})" class="absolute top-2 right-2 text-red-400 opacity-0 group-hover:opacity-100 transition no-print">×</button>
-                        <input type="text" value="${c.title}" placeholder="Carousel Title..." oninput="updateCar(${i}, 'title', this.value)" class="editable-text font-semibold mb-2 text-brand-primary dark:text-brand-accent">
-                        <div class="flex gap-2 text-sm">
-                            <select onchange="updateCar(${i}, 'status', this.value)" class="status-select ${sColor} w-28">
-                                <option ${c.status==='Planned'?'selected':''}>Planned</option>
-                                <option ${c.status==='Designing'?'selected':''}>Designing</option>
-                                <option ${c.status==='Done'?'selected':''}>Done</option>
-                            </select>
-                            <input type="text" value="${c.link}" placeholder="Paste Canva link here..." oninput="updateCar(${i}, 'link', this.value)" class="editable-text text-xs flex-1 text-gray-500">
-                        </div>
-                    </div>
+            state.influencers.forEach((inf, i) => {
+                tbody.innerHTML += `
+                    <tr class="${inf.done ? 'bg-brand-accent/10' : ''}">
+                        <td><input type="text" value="${inf.name}" oninput="updateInf(${i}, 'name', this.value)" class="editable-input font-semibold"></td>
+                        <td><input type="text" value="${inf.instaId}" oninput="updateInf(${i}, 'instaId', this.value)" class="editable-input text-brand-primary font-medium"></td>
+                        <td><input type="text" value="${inf.niche}" oninput="updateInf(${i}, 'niche', this.value)" class="editable-input text-sm"></td>
+                        <td><input type="text" value="${inf.status}" oninput="updateInf(${i}, 'status', this.value)" class="editable-input text-sm text-center bg-gray-100 dark:bg-gray-800 rounded"></td>
+                        <td class="text-center">
+                            <input type="checkbox" ${inf.done ? 'checked':''} onchange="updateInf(${i}, 'done', this.checked)" class="w-5 h-5 rounded accent-brand-accent cursor-pointer">
+                        </td>
+                        <td class="text-right no-print">
+                            <button onclick="deleteItem('influencers', ${i})" class="text-red-400 hover:text-red-600 font-bold px-2 text-lg">×</button>
+                        </td>
+                    </tr>
                 `;
             });
+            calculateDashboard();
         };
-        const updateCar = (i, key, val) => { state.carousels[i][key] = val; saveState(); if(key==='status') renderCarousels(); };
-        const addCarousel = () => { state.carousels.push({title:'', status:'Planned', link:''}); saveState(); renderCarousels(); };
 
-        // --- 4. NOTES RENDER ---
+        const updateInf = (i, key, val) => {
+            state.influencers[i][key] = val;
+            saveState();
+            if(key === 'done') renderInfluencers();
+        };
+        const addInfluencerRow = () => {
+            state.influencers.push({name: '', instaId: '@', niche: '', status: 'Finding', done: false});
+            saveState(); renderInfluencers();
+        };
+
+        // --- RENDER STICKY NOTES ---
         const renderNotes = () => {
-            const container = document.getElementById('notesContainer');
-            container.innerHTML = '';
-            state.notes.forEach((n, i) => {
-                container.innerHTML += `
-                    <div class="p-3 bg-yellow-50 dark:bg-yellow-900/10 rounded-xl border border-yellow-100 dark:border-yellow-900/30 relative group">
-                        <button onclick="deleteItem('notes', ${i})" class="absolute top-2 right-2 text-red-400 opacity-0 group-hover:opacity-100 transition no-print">×</button>
-                        <input type="text" value="${n.date}" placeholder="Date / Topic" oninput="updateNote(${i}, 'date', this.value)" class="editable-text font-bold text-sm text-yellow-800 dark:text-yellow-500 mb-1">
-                        <textarea rows="3" placeholder="Type your notes, learnings, or strategies here..." oninput="updateNote(${i}, 'text', this.value)" class="editable-text text-sm w-full bg-transparent">${n.text}</textarea>
+            const grid = document.getElementById('notesGrid');
+            grid.innerHTML = '';
+
+            const colors = ['border-blue-300', 'border-yellow-300', 'border-green-300', 'border-purple-300', 'border-red-300'];
+
+            state.notes.forEach((note, i) => {
+                grid.innerHTML += `
+                    <div class="sticky-note border-t-4 ${note.color || colors[0]} shadow-md">
+                        <button onclick="deleteItem('notes', ${i})" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition no-print font-bold">✕</button>
+                        <input type="text" value="${note.title}" oninput="updateNote(${i}, 'title', this.value)" placeholder="Note Title..." class="bg-transparent font-bold outline-none border-b border-transparent focus:border-gray-300 pb-1">
+                        <textarea rows="4" oninput="updateNote(${i}, 'text', this.value)" placeholder="Type your ideas, feedback, or to-do lists here..." class="bg-transparent outline-none text-sm resize-none mt-2 w-full h-full">${note.text}</textarea>
                     </div>
                 `;
             });
         };
-        const updateNote = (i, key, val) => { state.notes[i][key] = val; saveState(); };
-        const addNote = () => { state.notes.push({date:'', text:''}); saveState(); renderNotes(); };
+
+        const updateNote = (i, key, val) => {
+            state.notes[i][key] = val;
+            saveState();
+        };
+        const addNote = () => {
+            const colors = ['border-blue-400', 'border-yellow-400', 'border-green-400', 'border-purple-400', 'border-red-400'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            state.notes.push({title: '', text: '', color: randomColor});
+            saveState(); renderNotes();
+        };
 
         // --- UTILS ---
         const deleteItem = (arrayName, index) => {
             state[arrayName].splice(index, 1);
             saveState();
-            if(arrayName==='ads') renderAds();
-            if(arrayName==='calendar') renderCalendar();
-            if(arrayName==='carousels') renderCarousels();
-            if(arrayName==='notes') renderNotes();
+            if(arrayName === 'calendar') renderCalendar();
+            if(arrayName === 'influencers') renderInfluencers();
+            if(arrayName === 'notes') renderNotes();
         };
 
-        const calculateTotals = () => {
-            const totalSpend = state.ads.reduce((sum, ad) => sum + (Number(ad.spent) || 0), 0);
-            document.getElementById('totalSpendDisplay').innerText = `₹${totalSpend.toLocaleString('en-IN')}`;
-        };
-
-        // Dark Mode
+        // Dark Mode Setup
         const toggleDarkMode = () => {
             state.darkMode = !state.darkMode;
-            localStorage.setItem('tcp_dark', state.darkMode);
+            localStorage.setItem('wk_dark', state.darkMode);
             applyDarkMode();
         };
         const applyDarkMode = () => {
             if (state.darkMode) {
                 document.documentElement.classList.add('dark');
-                document.getElementById('sunIcon').classList.remove('hidden');
-                document.getElementById('moonIcon').classList.add('hidden');
+                document.getElementById('themeIcon').innerText = '☀️';
             } else {
                 document.documentElement.classList.remove('dark');
-                document.getElementById('sunIcon').classList.add('hidden');
-                document.getElementById('moonIcon').classList.remove('hidden');
+                document.getElementById('themeIcon').innerText = '🌙';
             }
         };
 
-        // Export PDF
-        async function exportToPDF() {
-            const btn = document.querySelector('.btn-primary');
-            btn.innerText = 'Generating...';
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('p', 'mm', 'a4');
-            
-            // Render textareas to full height for print
-            document.querySelectorAll('textarea').forEach(t => {
-                t.style.height = t.scrollHeight + 'px';
+        // Adjust textareas initially
+        setTimeout(() => {
+            document.querySelectorAll('textarea').forEach(el => {
+                el.style.height = 'auto';
+                el.style.height = (el.scrollHeight) + 'px';
             });
+        }, 100);
 
-            await html2canvas(document.body, {
-                scale: 2,
-                useCORS: true,
-                ignoreElements: (el) => el.classList.contains('no-print') || el.tagName === 'NAV'
-            }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const imgWidth = 210; 
-                const pageHeight = 297; 
-                const imgHeight = canvas.height * imgWidth / canvas.width;
-                let heightLeft = imgHeight;
-                let position = 0;
-
-                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-
-                while (heightLeft >= 0) {
-                    position = heightLeft - imgHeight;
-                    doc.addPage();
-                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
-                }
-                doc.save('TCP-Tracker-Report.pdf');
-            });
-            btn.innerText = 'Export PDF';
-            
-            // reset textareas
-            document.querySelectorAll('textarea').forEach(t => t.style.height = 'auto');
-        }
-
-        // Init
-        initGlobals();
+        // INITIALIZE ALL
+        initEditableTexts();
         applyDarkMode();
-        renderAds();
         renderCalendar();
-        renderCarousels();
+        renderInfluencers();
         renderNotes();
 
     </script>
