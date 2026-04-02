@@ -1,741 +1,705 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fiwe Content Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#F5F4EF;
-  --surface:#FFFFFF;
-  --s2:#EEEDE6;
-  --s3:#E6E4DB;
-  --border:#DDD9CE;
-  --border2:#C8C4B8;
-  --text:#1A1916;
-  --muted:#888070;
-  --accent:#C94C18;
-  --a-bg:#FDF0EB;
-  --a-hover:#A83C10;
-  --green:#1E7A52;
-  --g-bg:#EAF7F1;
-  --yellow:#8A6200;
-  --y-bg:#FFF8E0;
-  --blue:#1A5CA0;
-  --b-bg:#EAF2FC;
-  --red:#B82020;
-  --r-bg:#FDEBEB;
-  --r:10px;
-  --shadow:0 1px 3px rgba(0,0,0,0.06),0 4px 14px rgba(0,0,0,0.05);
-  --font:'DM Sans',system-ui,sans-serif;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.5;min-height:100vh}
-h1,h2,h3,.serif{font-family:'Instrument Serif',Georgia,serif;font-weight:400;letter-spacing:-0.2px}
-::-webkit-scrollbar{width:5px;height:5px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIWE - Instagram Carousel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* ── NAV ─── */
-nav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;gap:12px}
-.logo{font-family:'Instrument Serif',serif;font-size:1.3rem;color:var(--text);display:flex;align-items:center;gap:7px;white-space:nowrap}
-.logo-dot{width:8px;height:8px;background:var(--accent);border-radius:50%}
-.nav-r{display:flex;align-items:center;gap:8px}
-.search-wrap{position:relative}
-.search-ico{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--muted);width:14px;pointer-events:none}
-.search-input{background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:13px;padding:7px 12px 7px 30px;border-radius:8px;outline:none;width:190px;transition:border-color .15s,background .15s}
-.search-input:focus{border-color:var(--accent);background:var(--surface)}
+        body {
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
 
-/* ── BUTTONS ─── */
-.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;border:none;font-family:var(--font);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap;line-height:1.3}
-.btn-sm{padding:5px 11px;font-size:12px}
-.btn-xs{padding:4px 9px;font-size:11px}
-.btn-p{background:var(--accent);color:#fff}
-.btn-p:hover{background:var(--a-hover)}
-.btn-o{background:transparent;color:var(--text);border:1px solid var(--border)}
-.btn-o:hover{background:var(--s2);border-color:var(--border2)}
-.btn-ghost{background:none;border:none;cursor:pointer;font-family:var(--font);font-size:12px;color:var(--muted);padding:4px 8px;border-radius:6px}
-.btn-ghost:hover{background:var(--s2);color:var(--red)}
-.btn-del{background:none;border:none;cursor:pointer;font-family:var(--font);font-size:12px;color:var(--muted);padding:3px 8px;border-radius:6px;transition:all .15s}
-.btn-del:hover{background:var(--r-bg);color:var(--red)}
+        .carousel-container {
+            width: 1080px;
+            height: 1350px;
+            background: #000;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+        }
 
-/* ── LAYOUT ─── */
-main{max-width:1180px;margin:0 auto;padding:24px 16px;display:flex;flex-direction:column;gap:24px}
+        .slides-wrapper {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+        }
 
-/* ── CARD ─── */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
-.card-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
-.card-title{font-family:'Instrument Serif',serif;font-size:1.2rem;display:flex;align-items:center;gap:8px}
-.card-body{padding:18px 20px}
+        .slide {
+            min-width: 1080px;
+            height: 1350px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            overflow: hidden;
+        }
 
-/* ── PILLS ─── */
-.pill{display:inline-flex;align-items:center;padding:3px 8px;border-radius:100px;font-size:11px;font-weight:600;white-space:nowrap}
-.p-gray{background:var(--s2);color:var(--muted)}
-.p-orange{background:var(--a-bg);color:var(--accent)}
-.p-green{background:var(--g-bg);color:var(--green)}
-.p-yellow{background:var(--y-bg);color:var(--yellow)}
-.p-blue{background:var(--b-bg);color:var(--blue)}
+        /* Slide 1 - Hook */
+        .slide-1 {
+            background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0a 100%);
+        }
 
-/* ── STAT STRIP ─── */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px}
-.stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
-.stat .s-num{font-family:'Instrument Serif',serif;font-size:1.9rem;line-height:1.1;margin-bottom:3px}
-.stat .s-lbl{font-size:11px;font-weight:500;color:var(--muted)}
-.stat .s-bar{height:3px;background:var(--border);border-radius:2px;margin-top:8px;overflow:hidden}
-.stat .s-fill{height:100%;border-radius:2px;transition:width .4s ease}
-.s-a .s-fill{background:var(--accent)}
-.s-g .s-fill{background:var(--green)}
-.s-b .s-fill{background:var(--blue)}
-.s-y .s-fill{background:var(--yellow)}
+        .phone-glow {
+            position: absolute;
+            bottom: -100px;
+            width: 400px;
+            height: 600px;
+            background: linear-gradient(180deg, rgba(255,107,53,0.3) 0%, transparent 100%);
+            border-radius: 40px;
+            filter: blur(60px);
+            animation: pulse 3s ease-in-out infinite;
+        }
 
-/* ── ACCOUNTS ─── */
-.acc-list{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
-.acc-tag{display:inline-flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:13px}
-.acc-tag button{background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px;line-height:1;padding:0 2px}
-.acc-tag button:hover{color:var(--red)}
-.acc-add-row{display:flex;gap:8px;align-items:center}
-.acc-add-row input{background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:13px;padding:7px 12px;border-radius:8px;outline:none;width:210px;transition:border-color .15s}
-.acc-add-row input:focus{border-color:var(--accent);background:var(--surface)}
+        .floating-icon {
+            position: absolute;
+            font-size: 60px;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+            filter: blur(2px);
+        }
 
-/* ── CALENDAR ─── */
-.cal-filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.f-sel{background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:12px;padding:6px 10px;border-radius:8px;outline:none;cursor:pointer}
-.f-sel:focus{border-color:var(--accent)}
+        .icon-1 { top: 10%; left: 10%; animation-delay: 0s; }
+        .icon-2 { top: 20%; right: 15%; animation-delay: 1s; }
+        .icon-3 { top: 60%; left: 5%; animation-delay: 2s; }
+        .icon-4 { top: 70%; right: 10%; animation-delay: 3s; }
+        .icon-5 { top: 40%; left: 15%; animation-delay: 4s; }
 
-.prog-wrap{margin:12px 20px 0;padding-bottom:2px}
-.prog-info{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-weight:500;margin-bottom:5px}
-.prog-bar{background:var(--border);border-radius:100px;height:4px;overflow:hidden}
-.prog-fill{height:100%;border-radius:100px;background:var(--accent);transition:width .4s ease}
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.4; }
+            50% { transform: translateY(-30px) rotate(10deg); opacity: 0.8; }
+        }
 
-/* Table column header */
-.cal-cols{display:grid;grid-template-columns:116px 128px 80px 100px 1fr 96px 30px;padding:8px 10px 8px 0;margin:8px 20px 4px;border-bottom:1px solid var(--border)}
-.col-h{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;padding:0 8px}
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
 
-/* Entry */
-.cal-entries{display:flex;flex-direction:column;gap:3px;padding:0 20px 18px}
-.entry{border:1px solid var(--border);border-radius:10px;background:var(--surface);transition:border-color .15s}
-.entry:hover{border-color:var(--border2)}
-.entry.is-done{opacity:.52}
+        /* Slide 2 - Algorithm Maze */
+        .slide-2 {
+            background: #0a0a0a;
+        }
 
-/* Main compact row */
-.e-row{display:grid;grid-template-columns:116px 128px 80px 100px 1fr 96px 30px;align-items:center}
-.ec{padding:8px;border-right:1px solid var(--border)}
-.ec:last-child{border-right:none;display:flex;align-items:center;justify-content:center}
-.ec input[type=date],.ec input[type=text]{background:transparent;border:none;color:var(--text);font-family:var(--font);font-size:13px;width:100%;outline:none}
-.ec input[type=date]:focus,.ec input[type=text]:focus{background:var(--a-bg);border-radius:4px;padding:1px 4px}
-.ec select{background:transparent;border:none;color:var(--text);font-family:var(--font);font-size:12px;width:100%;outline:none;cursor:pointer}
-.ec select:focus{background:var(--a-bg);border-radius:4px}
-.ec.hook-c{min-width:0}
-.ec.hook-c input{min-width:0}
-.chk{width:17px;height:17px;accent-color:var(--accent);cursor:pointer}
+        .maze-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,107,53,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,107,53,0.1) 1px, transparent 1px);
+            background-size: 80px 80px;
+            animation: gridMove 20s linear infinite;
+        }
 
-/* Script expand */
-.e-expander{width:100%;padding:5px 10px;font-size:11px;color:var(--muted);background:var(--s2);border:none;border-top:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:var(--font);transition:background .15s}
-.e-expander:hover{background:var(--a-bg);color:var(--accent)}
-.e-expander .arr{transition:transform .2s;display:inline-block}
-.e-expander.open .arr{transform:rotate(180deg)}
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(80px, 80px); }
+        }
 
-.script-panel{display:none;flex-direction:column;gap:10px;padding:14px;border-top:1px solid var(--border);background:var(--s2)}
-.script-panel.open{display:flex}
-.sp-lbl{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
-.sp-ta{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:13px;padding:10px 12px;border-radius:8px;resize:vertical;min-height:80px;outline:none;line-height:1.6}
-.sp-ta:focus{border-color:var(--accent)}
-.sp-link-row{display:flex;gap:8px;align-items:center}
-.sp-link-input{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:13px;padding:7px 12px;border-radius:8px;outline:none}
-.sp-link-input:focus{border-color:var(--accent)}
-.sp-foot{display:flex;justify-content:flex-end}
+        .trapped-phone {
+            position: absolute;
+            width: 200px;
+            height: 350px;
+            border: 3px solid rgba(255,107,53,0.5);
+            border-radius: 30px;
+            background: rgba(255,107,53,0.05);
+            box-shadow: 0 0 60px rgba(255,107,53,0.3);
+            animation: trapped 4s ease-in-out infinite;
+        }
 
-/* Mobile: stacked entry */
-@media(max-width:680px){
-  .cal-cols{display:none}
-  .e-row{grid-template-columns:1fr 1fr;gap:0}
-  .ec{border-right:none;border-bottom:1px solid var(--border);padding:8px 10px}
-  .ec:nth-child(2n-1){border-right:1px solid var(--border)}
-  .ec.hook-c{grid-column:1/-1;border-right:none}
-  .ec:last-child{grid-column:1/-1;border-right:none;border-bottom:none;justify-content:center;padding:8px}
-  .search-input{width:140px}
-}
+        @keyframes trapped {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(0.95); }
+        }
 
-/* ── INF TABLE ─── */
-.t-scroll{overflow-x:auto}
-table.inf-t{width:100%;border-collapse:collapse;font-size:13px}
-.inf-t thead th{background:var(--s2);color:var(--muted);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;padding:9px 11px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
-.inf-t tbody tr{border-bottom:1px solid var(--border);transition:background .12s}
-.inf-t tbody tr:last-child{border-bottom:none}
-.inf-t tbody tr:hover{background:var(--s2)}
-.inf-t td{padding:8px 11px;vertical-align:middle}
-.t-inp{background:transparent;border:none;font-family:var(--font);font-size:13px;color:var(--text);width:100%;outline:none;min-width:55px}
-.t-inp:focus{background:var(--a-bg);border-radius:4px;padding:1px 5px}
-.t-sel{background:transparent;border:none;font-family:var(--font);font-size:12px;color:var(--text);outline:none;cursor:pointer}
-.t-sel:focus{background:var(--s2);border-radius:4px}
+        /* Slide 3 - Clean Interests */
+        .slide-3 {
+            background: radial-gradient(circle at 50% 50%, #1a1a3e 0%, #0a0a0a 100%);
+        }
 
-/* ── CAROUSELS ─── */
-.car-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
-.car-item{border:1px solid var(--border);border-radius:10px;padding:14px;background:var(--s2);transition:border-color .15s}
-.car-item:hover{border-color:var(--border2)}
-.car-item .car-title{background:transparent;border:none;color:var(--text);font-family:var(--font);font-weight:600;font-size:14px;width:100%;outline:none;margin-bottom:8px}
-.car-item .car-title:focus{background:var(--surface);border-radius:4px;padding:2px 5px}
-.car-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.car-link-inp{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--accent);font-family:var(--font);font-size:12px;padding:6px 10px;border-radius:7px;outline:none;margin-top:8px}
-.car-link-inp:focus{border-color:var(--accent)}
-.m-pair{display:flex;gap:7px;margin-top:8px}
-.m-box{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:6px 9px;flex:1;font-size:11px}
-.m-box label{color:var(--muted);display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
-.m-box input{background:transparent;border:none;font-family:var(--font);font-weight:600;font-size:13px;color:var(--text);width:100%;outline:none}
+        .interest-bubble {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,107,53,0.3);
+            box-shadow: 0 0 30px rgba(255,107,53,0.2);
+            animation: bubbleFloat 8s ease-in-out infinite;
+        }
 
-/* ── STICKY ─── */
-.sticky-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
-.sticky-inp{flex:1;min-width:160px;background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:13px;padding:8px 12px;border-radius:8px;outline:none;transition:border-color .15s}
-.sticky-inp:focus{border-color:var(--accent);background:var(--surface)}
-.swatches{display:flex;gap:5px;align-items:center}
-.sw{width:20px;height:20px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s}
-.sw:hover,.sw.on{border-color:var(--text);transform:scale(1.18)}
-.sw-y{background:#C49A10}
-.sw-g{background:#1E7A52}
-.sw-b{background:#1A5CA0}
-.sw-r{background:#B82020}
-.sw-p{background:#7248C8}
+        .bubble-1 { width: 120px; height: 120px; top: 15%; left: 20%; animation-delay: 0s; }
+        .bubble-2 { width: 100px; height: 100px; top: 25%; right: 25%; animation-delay: 2s; }
+        .bubble-3 { width: 140px; height: 140px; bottom: 25%; left: 15%; animation-delay: 4s; }
+        .bubble-4 { width: 90px; height: 90px; bottom: 35%; right: 20%; animation-delay: 6s; }
 
-.notes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:12px}
-.note{border-radius:10px;padding:13px;min-height:120px;display:flex;flex-direction:column;gap:5px;box-shadow:0 2px 8px rgba(0,0,0,0.07);transition:transform .15s,box-shadow .15s}
-.note:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,0.11)}
-.note.n-y{background:#FFFCE8;border:1px solid #E8C840}
-.note.n-g{background:#ECFAF3;border:1px solid #70C498}
-.note.n-b{background:#EAF2FC;border:1px solid #70A4D8}
-.note.n-r{background:#FEF0F0;border:1px solid #D88888}
-.note.n-p{background:#F4F0FE;border:1px solid #A888D8}
-.note-d{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.note textarea{flex:1;background:transparent;border:none;resize:none;font-family:var(--font);font-size:13px;color:var(--text);outline:none;line-height:1.6}
-.note-foot{display:flex;justify-content:flex-end}
-.note-del{background:none;border:none;cursor:pointer;color:var(--muted);font-size:11px;padding:2px 6px;border-radius:4px}
-.note-del:hover{background:rgba(0,0,0,0.07);color:var(--red)}
+        @keyframes bubbleFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.05); }
+        }
 
-/* ── MODAL ─── */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:200;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}
-.modal-overlay.open{display:flex}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:26px;width:100%;max-width:430px;box-shadow:0 8px 40px rgba(0,0,0,0.14)}
-.modal h3{font-family:'Instrument Serif',serif;font-size:1.2rem;margin-bottom:18px}
-.mf{margin-bottom:12px}
-.mf label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:5px}
-.mf input,.mf select{width:100%;background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:13px;padding:8px 12px;border-radius:8px;outline:none;transition:border-color .15s}
-.mf input:focus,.mf select:focus{border-color:var(--accent);background:var(--surface)}
-.m2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.m-acts{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+        /* Slide 4 - FIWE Logo */
+        .slide-4 {
+            background: radial-gradient(circle at center, #2a2a4e 0%, #0a0a0a 70%);
+        }
 
-/* ── TOAST ─── */
-#toast{position:fixed;bottom:18px;right:18px;background:var(--text);color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:500;z-index:999;opacity:0;transform:translateY(6px);transition:all .25s;pointer-events:none}
-#toast.on{opacity:1;transform:translateY(0)}
+        .logo-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255,107,53,0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: logoPulse 4s ease-in-out infinite;
+        }
 
-/* ── EMPTY STATE ─── */
-.empty{text-align:center;padding:28px;color:var(--muted);font-size:13px}
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 0.3; }
+        }
 
-/* two-col layout */
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media(max-width:720px){.two-col{grid-template-columns:1fr}}
-</style>
+        .spotlight {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 40%, transparent 0%, rgba(0,0,0,0.8) 70%);
+        }
+
+        /* Slide 5 - 50+ Interests */
+        .slide-5 {
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a3e 100%);
+        }
+
+        .spheres-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .sphere {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,107,53,0.8), rgba(255,140,0,0.6));
+            box-shadow: 0 0 40px rgba(255,107,53,0.5);
+            animation: sphereOrbit 15s linear infinite;
+        }
+
+        .sphere-1 { width: 80px; height: 80px; top: 20%; left: 30%; animation-delay: 0s; }
+        .sphere-2 { width: 60px; height: 60px; top: 30%; right: 35%; animation-delay: -3s; }
+        .sphere-3 { width: 100px; height: 100px; bottom: 30%; left: 25%; animation-delay: -6s; }
+        .sphere-4 { width: 70px; height: 70px; bottom: 25%; right: 30%; animation-delay: -9s; }
+        .sphere-5 { width: 50px; height: 50px; top: 50%; left: 20%; animation-delay: -12s; }
+
+        @keyframes sphereOrbit {
+            0% { transform: rotate(0deg) translateX(100px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(100px) rotate(-360deg); }
+        }
+
+        /* Slide 6 - Voice Rooms */
+        .slide-6 {
+            background: #0a0a0a;
+        }
+
+        .voice-wave {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .wave-bar {
+            width: 8px;
+            background: linear-gradient(180deg, #ff6b35, #ff8c00);
+            border-radius: 4px;
+            animation: wave 1.5s ease-in-out infinite;
+        }
+
+        .wave-bar:nth-child(1) { height: 40px; animation-delay: 0s; }
+        .wave-bar:nth-child(2) { height: 80px; animation-delay: 0.1s; }
+        .wave-bar:nth-child(3) { height: 120px; animation-delay: 0.2s; }
+        .wave-bar:nth-child(4) { height: 60px; animation-delay: 0.3s; }
+        .wave-bar:nth-child(5) { height: 100px; animation-delay: 0.4s; }
+
+        @keyframes wave {
+            0%, 100% { transform: scaleY(0.5); opacity: 0.5; }
+            50% { transform: scaleY(1); opacity: 1; }
+        }
+
+        .connection-circle {
+            position: absolute;
+            border: 2px solid rgba(255,107,53,0.3);
+            border-radius: 50%;
+            animation: expand 3s ease-out infinite;
+        }
+
+        .connection-circle:nth-child(1) { width: 200px; height: 200px; animation-delay: 0s; }
+        .connection-circle:nth-child(2) { width: 300px; height: 300px; animation-delay: 1s; }
+        .connection-circle:nth-child(3) { width: 400px; height: 400px; animation-delay: 2s; }
+
+        @keyframes expand {
+            0% { transform: scale(0.8); opacity: 0.8; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        /* Slide 7 - Community */
+        .slide-7 {
+            background: radial-gradient(circle at 50% 50%, #2a1a3e 0%, #0a0a0a 100%);
+        }
+
+        .node {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff6b35;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #ff6b35;
+            animation: nodePulse 2s ease-in-out infinite;
+        }
+
+        .node-1 { top: 30%; left: 30%; animation-delay: 0s; }
+        .node-2 { top: 25%; right: 35%; animation-delay: 0.5s; }
+        .node-3 { bottom: 35%; left: 35%; animation-delay: 1s; }
+        .node-4 { bottom: 30%; right: 30%; animation-delay: 1.5s; }
+        .node-5 { top: 50%; left: 50%; animation-delay: 0.25s; }
+
+        @keyframes nodePulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,107,53,0.6), transparent);
+            transform-origin: left center;
+            animation: lineGlow 3s ease-in-out infinite;
+        }
+
+        /* Slide 8 - CTA */
+        .slide-8 {
+            background: linear-gradient(135deg, #1a0a1a 0%, #0a0a0a 50%, #1a1a0a 100%);
+        }
+
+        .fire-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(255,107,53,0.2) 0%, transparent 60%);
+            animation: firePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes firePulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        /* Typography */
+        .slide-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .main-text {
+            font-size: 72px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+            margin-bottom: 40px;
+            letter-spacing: -2px;
+        }
+
+        .highlight {
+            color: #ff6b35;
+            position: relative;
+            display: inline-block;
+        }
+
+        .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b35, #ff8c00);
+            border-radius: 2px;
+        }
+
+        .sub-text {
+            font-size: 36px;
+            color: rgba(255,255,255,0.7);
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .cta-text {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ff6b35;
+            margin-top: 60px;
+        }
+
+        .fiwe-logo {
+            font-size: 120px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff6b35, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            letter-spacing: -4px;
+        }
+
+        .tagline {
+            font-size: 40px;
+            color: rgba(255,255,255,0.9);
+            font-weight: 300;
+        }
+
+        /* Navigation */
+        .nav-dots {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: #ff6b35;
+            transform: scale(1.3);
+        }
+
+        .nav-arrows {
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 40px;
+            pointer-events: none;
+        }
+
+        .arrow {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: all;
+            transition: all 0.3s;
+            font-size: 24px;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .arrow:hover {
+            background: rgba(255,107,53,0.3);
+            transform: scale(1.1);
+        }
+
+        .slide-counter {
+            position: absolute;
+            top: 60px;
+            right: 80px;
+            font-size: 24px;
+            color: rgba(255,255,255,0.5);
+            font-weight: 600;
+            z-index: 100;
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .carousel-container {
+                width: 100vw;
+                height: 125vw;
+                max-width: 540px;
+                max-height: 675px;
+            }
+            
+            .slide {
+                min-width: 100vw;
+                max-width: 540px;
+                padding: 40px;
+            }
+            
+            .main-text {
+                font-size: 36px;
+            }
+            
+            .sub-text {
+                font-size: 18px;
+            }
+            
+            .fiwe-logo {
+                font-size: 60px;
+            }
+            
+            .tagline {
+                font-size: 20px;
+            }
+            
+            .cta-text {
+                font-size: 24px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<nav>
-  <div class="logo"><span class="logo-dot"></span>Fiwe Tracker</div>
-  <div class="nav-r">
-    <div class="search-wrap">
-      <svg class="search-ico" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-      <input id="gSearch" class="search-input" placeholder="Search…">
+<div class="carousel-container" id="carousel">
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / 8
     </div>
-    <button class="btn btn-p btn-sm" onclick="openModal()">+ Add Entry</button>
-  </div>
-</nav>
 
-<main>
-
-  <!-- STATS -->
-  <div class="stats-grid" id="statsGrid"></div>
-
-  <!-- ACCOUNTS -->
-  <div class="card">
-    <div class="card-head">
-      <div class="card-title">📱 Instagram Accounts</div>
-      <span style="font-size:12px;color:var(--muted)">These appear as options in the calendar dropdown</span>
-    </div>
-    <div class="card-body">
-      <div class="acc-list" id="accList"></div>
-      <div class="acc-add-row">
-        <input id="accInput" placeholder="@your.instagram.id">
-        <button class="btn btn-o btn-sm" onclick="addAcc()">+ Add Account</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- CALENDAR -->
-  <div class="card">
-    <div class="card-head">
-      <div class="card-title">📅 Content Calendar</div>
-      <div class="cal-filters">
-        <select id="fAcc" class="f-sel" onchange="renderCal()">
-          <option value="">All Accounts</option>
-        </select>
-        <select id="fType" class="f-sel" onchange="renderCal()">
-          <option value="">All Types</option>
-          <option>Reel</option><option>Carousel</option><option>Story</option>
-        </select>
-        <button class="btn btn-p btn-sm" onclick="openModal()">+ Add</button>
-      </div>
-    </div>
-    <div class="prog-wrap">
-      <div class="prog-info">
-        <span>Progress</span>
-        <span id="progTxt">0 / 0 done</span>
-      </div>
-      <div class="prog-bar"><div id="progFill" class="prog-fill" style="width:0%"></div></div>
-    </div>
-    <div class="cal-cols" id="calCols">
-      <div class="col-h" style="padding-left:10px">Date</div>
-      <div class="col-h">Account</div>
-      <div class="col-h">Type</div>
-      <div class="col-h">Status</div>
-      <div class="col-h">Hook / Topic</div>
-      <div class="col-h">Script</div>
-      <div class="col-h">✓</div>
-    </div>
-    <div id="calEntries" class="cal-entries"></div>
-    <div id="calEmpty" class="empty" style="display:none">No entries yet. <a href="#" onclick="openModal();return false" style="color:var(--accent)">Add your first →</a></div>
-  </div>
-
-  <!-- INFLUENCERS -->
-  <div class="card">
-    <div class="card-head">
-      <div class="card-title">🤝 Influencer Tracker</div>
-      <div style="display:flex;align-items:center;gap:14px">
-        <div style="text-align:right">
-          <div style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em">Total Spent</div>
-          <div id="totalSpent" style="font-family:'Instrument Serif',serif;font-size:1.4rem;color:var(--accent)">₹0</div>
+    <div class="slides-wrapper" id="slidesWrapper">
+        
+        <!-- SLIDE 1: Hook -->
+        <div class="slide slide-1">
+            <div class="phone-glow"></div>
+            <div class="floating-icon icon-1">😂</div>
+            <div class="floating-icon icon-2">📱</div>
+            <div class="floating-icon icon-3">🎵</div>
+            <div class="floating-icon icon-4">🐱</div>
+            <div class="floating-icon icon-5">🍕</div>
+            
+            <div class="slide-content">
+                <div class="main-text">
+                    Stop scrolling random content…<br>
+                    start seeing what you <span class="highlight">actually care about.</span>
+                </div>
+            </div>
         </div>
-        <button class="btn btn-o btn-sm" onclick="addInf()">+ Add</button>
-      </div>
-    </div>
-    <div class="t-scroll">
-      <table class="inf-t">
-        <thead><tr>
-          <th>Name</th><th>Instagram ID</th><th>Niche</th><th>Followers</th>
-          <th>Reel Link</th><th>Price (₹)</th><th>Status</th><th>Downloads</th><th></th>
-        </tr></thead>
-        <tbody id="infBody"></tbody>
-      </table>
-    </div>
-    <div id="infEmpty" class="empty" style="display:none">No influencers yet. Click "+ Add" to start.</div>
-  </div>
 
-  <!-- CAROUSELS + NOTES -->
-  <div class="two-col">
-    <div class="card">
-      <div class="card-head">
-        <div class="card-title">🎨 Carousels</div>
-        <span class="pill p-blue">3 posts</span>
-      </div>
-      <div class="card-body">
-        <div class="car-grid" id="carGrid"></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-head">
-        <div class="card-title">📌 Notes & Ideas</div>
-        <span class="pill p-gray" id="noteCnt">0 notes</span>
-      </div>
-      <div class="card-body">
-        <div class="sticky-bar">
-          <input id="noteInp" class="sticky-inp" placeholder="Idea, feedback, change to make…">
-          <div class="swatches">
-            <div class="sw sw-y on" data-c="y" onclick="pickSw(this)"></div>
-            <div class="sw sw-g" data-c="g" onclick="pickSw(this)"></div>
-            <div class="sw sw-b" data-c="b" onclick="pickSw(this)"></div>
-            <div class="sw sw-r" data-c="r" onclick="pickSw(this)"></div>
-            <div class="sw sw-p" data-c="p" onclick="pickSw(this)"></div>
-          </div>
-          <button class="btn btn-p btn-sm" onclick="addNote()">Pin</button>
+        <!-- SLIDE 2: Algorithm Problem -->
+        <div class="slide slide-2">
+            <div class="maze-grid"></div>
+            <div class="trapped-phone" style="top: 50%; left: 50%;"></div>
+            
+            <div class="slide-content">
+                <div class="main-text">
+                    Social media is broken.<br>
+                    You don't choose…<br>
+                    <span style="color: #ff6b35;">algorithm does.</span>
+                </div>
+            </div>
         </div>
-        <div class="notes-grid" id="notesGrid"></div>
-        <div id="notesEmpty" class="empty" style="display:none;padding:12px">No notes yet. Write your first idea above!</div>
-      </div>
-    </div>
-  </div>
 
-</main>
+        <!-- SLIDE 3: The Solution -->
+        <div class="slide slide-3">
+            <div class="interest-bubble bubble-1">✈️</div>
+            <div class="interest-bubble bubble-2">💼</div>
+            <div class="interest-bubble bubble-3">🏋️</div>
+            <div class="interest-bubble bubble-4">📚</div>
+            
+            <div class="slide-content">
+                <div class="main-text">
+                    Now imagine this…<br>
+                    You only see content based on <span class="highlight">your interests.</span>
+                </div>
+            </div>
+        </div>
 
-<!-- MODAL -->
-<div id="modal" class="modal-overlay">
-  <div class="modal">
-    <h3>Add Content Entry</h3>
-    <div class="m2">
-      <div class="mf"><label>Date</label><input type="date" id="mDate"></div>
-      <div class="mf"><label>Type</label>
-        <select id="mType"><option>Reel</option><option>Carousel</option><option>Story</option></select>
-      </div>
+        <!-- SLIDE 4: FIWE Intro -->
+        <div class="slide slide-4">
+            <div class="logo-glow"></div>
+            <div class="spotlight"></div>
+            
+            <div class="slide-content">
+                <div class="fiwe-logo">FIWE</div>
+                <div class="tagline">
+                    Where interests > followers
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: 50+ Interests -->
+        <div class="slide slide-5">
+            <div class="spheres-container">
+                <div class="sphere sphere-1"></div>
+                <div class="sphere sphere-2"></div>
+                <div class="sphere sphere-3"></div>
+                <div class="sphere sphere-4"></div>
+                <div class="sphere sphere-5"></div>
+            </div>
+            
+            <div class="slide-content">
+                <div class="main-text">
+                    <span style="color: #ff6b35; font-size: 96px;">50+</span><br>
+                    interests available<br>
+                </div>
+                <div class="sub-text" style="margin-top: 30px;">
+                    Travel, Business, Mindset… and more
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: Voice Rooms -->
+        <div class="slide slide-6">
+            <div class="connection-circle" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+            <div class="connection-circle" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+            <div class="connection-circle" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+            
+            <div class="voice-wave" style="top: 40%;">
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+            </div>
+            
+            <div class="slide-content" style="margin-top: 200px;">
+                <div class="main-text">
+                    Join rooms.<br>
+                    Talk to real people.<br>
+                    <span style="color: rgba(255,255,255,0.5);">No awkward DMs.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: Community -->
+        <div class="slide slide-7">
+            <div class="node node-1"></div>
+            <div class="node node-2"></div>
+            <div class="node node-3"></div>
+            <div class="node node-4"></div>
+            <div class="node node-5"></div>
+            
+            <div class="slide-content">
+                <div class="main-text">
+                    This is not just an app…<br>
+                    It's a <span class="highlight">community.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: CTA -->
+        <div class="slide slide-8">
+            <div class="fire-glow"></div>
+            
+            <div class="slide-content">
+                <div class="main-text">
+                    Try FIWE today.<br>
+                    Find your people.
+                </div>
+                <div class="cta-text">
+                    Comment 'FIWE' for<br>
+                    direct app link 👇
+                </div>
+            </div>
+        </div>
+
     </div>
-    <div class="m2">
-      <div class="mf"><label>Account</label><select id="mAcc"></select></div>
-      <div class="mf"><label>Status</label>
-        <select id="mStat"><option>Planned</option><option>In Progress</option><option>Complete</option><option>Published</option></select>
-      </div>
+
+    <div class="nav-arrows">
+        <div class="arrow" onclick="prevSlide()">‹</div>
+        <div class="arrow" onclick="nextSlide()">›</div>
     </div>
-    <div class="mf"><label>Topic / Hook</label><input type="text" id="mTopic" placeholder="What's the hook or topic?"></div>
-    <div class="m-acts">
-      <button class="btn btn-o" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-p" onclick="submitAdd()">Add Entry</button>
+
+    <div class="nav-dots">
+        <div class="dot active" onclick="goToSlide(0)"></div>
+        <div class="dot" onclick="goToSlide(1)"></div>
+        <div class="dot" onclick="goToSlide(2)"></div>
+        <div class="dot" onclick="goToSlide(3)"></div>
+        <div class="dot" onclick="goToSlide(4)"></div>
+        <div class="dot" onclick="goToSlide(5)"></div>
+        <div class="dot" onclick="goToSlide(6)"></div>
+        <div class="dot" onclick="goToSlide(7)"></div>
     </div>
-  </div>
 </div>
 
-<div id="toast">Saved!</div>
-
 <script>
-// ── helpers ───────────────────────────────────
-const LS={
-  get:(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch{return d}},
-  set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))
-};
-const today=new Date();
-const fmt=d=>d.toISOString().split('T')[0];
-const off=n=>fmt(new Date(today.getTime()+n*86400000));
-let _tt;
-const toast=(m='Saved!')=>{const el=document.getElementById('toast');el.textContent=m;el.classList.add('on');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('on'),2100)};
+    let currentSlide = 0;
+    const totalSlides = 8;
+    const slidesWrapper = document.getElementById('slidesWrapper');
+    const dots = document.querySelectorAll('.dot');
+    const currentSlideEl = document.getElementById('currentSlide');
 
-// ── defaults ──────────────────────────────────
-const defAccounts=['@fiwe.social','@fiwe.launch'];
+    function updateSlide() {
+        slidesWrapper.style.transform = `translateX(-${currentSlide * 1080}px)`;
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentSlide);
+        });
+        currentSlideEl.textContent = currentSlide + 1;
+    }
 
-const defCal=[
-  {id:1,date:off(0),account:'@fiwe.social',type:'Reel',hook:'Problem Fiwe solves for real people',status:'Planned',done:false,script:'',scriptLink:''},
-  {id:2,date:off(0),account:'@fiwe.launch',type:'Reel',hook:'Aesthetic intro – what is Fiwe?',status:'Planned',done:false,script:'',scriptLink:''},
-  {id:3,date:off(1),account:'@fiwe.social',type:'Reel',hook:'POV: You just found your tribe',status:'Planned',done:false,script:'',scriptLink:''},
-  {id:4,date:off(1),account:'@fiwe.launch',type:'Reel',hook:'Trending audio + app teaser',status:'Planned',done:false,script:'',scriptLink:''},
-  {id:5,date:off(2),account:'@fiwe.social',type:'Carousel',hook:'5 steps to find your tribe on Fiwe',status:'Planned',done:false,script:'',scriptLink:''},
-  {id:6,date:off(2),account:'@fiwe.launch',type:'Reel',hook:'App walkthrough in 60 seconds',status:'Planned',done:false,script:'',scriptLink:''},
-  {id:7,date:off(3),account:'@fiwe.social',type:'Reel',hook:'Why DMs don\'t work anymore',status:'Planned',done:false,script:'',scriptLink:''},
-  {id:8,date:off(4),account:'@fiwe.social',type:'Reel',hook:'Day 5 – Influencer collab drop',status:'Planned',done:false,script:'',scriptLink:''},
-];
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateSlide();
+    }
 
-const defInf=[
-  {id:1,name:'TechTina',instaId:'@techtina.in',niche:'Productivity',followers:'15k',reelLink:'',price:1500,status:'Agreed',downloads:120},
-  {id:2,name:'SocialSam',instaId:'@socialsam_',niche:'Community',followers:'22k',reelLink:'',price:2000,status:'Contacted',downloads:0},
-];
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        updateSlide();
+    }
 
-const defCar=[
-  {id:1,title:'Find Your Tribe on Fiwe',slides:7,status:'Designing',link:'',saves:0,shares:0},
-  {id:2,title:'Interest-Based vs Follower-Based',slides:5,status:'Not Started',link:'',saves:0,shares:0},
-  {id:3,title:'Launch Week Feature Tour',slides:10,status:'Not Started',link:'',saves:0,shares:0},
-];
+    function goToSlide(index) {
+        currentSlide = index;
+        updateSlide();
+    }
 
-// ── state ─────────────────────────────────────
-let S={
-  accounts: LS.get('fw3_acc', defAccounts),
-  cal:      LS.get('fw3_cal', defCal),
-  inf:      LS.get('fw3_inf', defInf),
-  car:      LS.get('fw3_car', defCar),
-  notes:    LS.get('fw3_notes', []),
-};
-let noteColor='y';
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') nextSlide();
+        if (e.key === 'ArrowLeft') prevSlide();
+    });
 
-const save=()=>{
-  LS.set('fw3_acc',S.accounts);
-  LS.set('fw3_cal',S.cal);
-  LS.set('fw3_inf',S.inf);
-  LS.set('fw3_car',S.car);
-  LS.set('fw3_notes',S.notes);
-};
+    // Touch/swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
 
-// ── stats ─────────────────────────────────────
-function renderStats(){
-  const reels=S.cal.filter(i=>i.type==='Reel');
-  const doneReels=reels.filter(i=>i.done).length;
-  const donePosts=S.cal.filter(i=>i.done).length;
-  const infOk=S.inf.filter(i=>['Agreed','Content Received','Posted'].includes(i.status)).length;
-  const totalDl=S.inf.reduce((s,i)=>s+i.downloads,0);
+    const carousel = document.getElementById('carousel');
+    
+    carousel.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
 
-  const items=[
-    {cls:'s-a',num:`${doneReels}/${reels.length}`,lbl:'Scripts Done',pct:reels.length?doneReels/reels.length*100:0},
-    {cls:'s-g',num:`${donePosts}/${S.cal.length}`,lbl:'Posts Published',pct:S.cal.length?donePosts/S.cal.length*100:0},
-    {cls:'s-b',num:`${infOk}/${S.inf.length}`,lbl:'Influencers Confirmed',pct:S.inf.length?infOk/S.inf.length*100:0},
-    {cls:'s-y',num:totalDl.toLocaleString(),lbl:'Downloads via Inf.',pct:Math.min(totalDl/3500*100,100)},
-  ];
-  document.getElementById('statsGrid').innerHTML=items.map(i=>`
-    <div class="stat ${i.cls}">
-      <div class="s-num">${i.num}</div>
-      <div class="s-lbl">${i.lbl}</div>
-      <div class="s-bar"><div class="s-fill" style="width:${i.pct.toFixed(0)}%"></div></div>
-    </div>
-  `).join('');
-}
+    carousel.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
 
-// ── accounts ──────────────────────────────────
-function renderAccounts(){
-  document.getElementById('accList').innerHTML=S.accounts.map((a,i)=>`
-    <div class="acc-tag">
-      <span>${a}</span>
-      <button onclick="delAcc(${i})" title="Remove">✕</button>
-    </div>
-  `).join('');
-  syncAccDropdowns();
-}
-function addAcc(){
-  let v=document.getElementById('accInput').value.trim();
-  if(!v)return;
-  if(!v.startsWith('@'))v='@'+v;
-  if(S.accounts.includes(v)){toast('Already exists!');return}
-  S.accounts.push(v);save();renderAccounts();toast('Account added!');
-  document.getElementById('accInput').value='';
-}
-function delAcc(i){
-  if(!confirm(`Remove ${S.accounts[i]}?`))return;
-  S.accounts.splice(i,1);save();renderAccounts();toast('Removed');
-}
-function syncAccDropdowns(){
-  const opts=S.accounts.map(a=>`<option value="${a}">${a}</option>`).join('');
-  const fAcc=document.getElementById('fAcc');
-  const mAcc=document.getElementById('mAcc');
-  const prevF=fAcc.value;
-  fAcc.innerHTML='<option value="">All Accounts</option>'+opts;
-  if(prevF)fAcc.value=prevF;
-  mAcc.innerHTML=opts;
-}
+    function handleSwipe() {
+        if (touchEndX < touchStartX - 50) nextSlide();
+        if (touchEndX > touchStartX + 50) prevSlide();
+    }
 
-// ── calendar ──────────────────────────────────
-function renderCal(){
-  const accF=document.getElementById('fAcc').value;
-  const typeF=document.getElementById('fType').value;
-  const q=document.getElementById('gSearch').value.toLowerCase();
-
-  let data=S.cal
-    .filter(i=>(!accF||i.account===accF)&&(!typeF||i.type===typeF)&&(!q||i.hook.toLowerCase().includes(q)||i.account.toLowerCase().includes(q)))
-    .sort((a,b)=>a.date.localeCompare(b.date)||a.id-b.id);
-
-  const wrap=document.getElementById('calEntries');
-  const empty=document.getElementById('calEmpty');
-  wrap.innerHTML='';
-
-  if(!data.length){empty.style.display='block';wrap.style.display='none';return}
-  empty.style.display='none';wrap.style.display='flex';
-
-  data.forEach(item=>{
-    const ri=S.cal.findIndex(i=>i.id===item.id);
-    const el=document.createElement('div');
-    el.className='entry'+(item.done?' is-done':'');
-    el.id='entry-'+item.id;
-
-    // Script preview text
-    const sprev=item.scriptLink
-      ?`<a href="${item.scriptLink}" target="_blank" style="color:var(--accent);font-size:12px" onclick="event.stopPropagation()">🔗 View</a>`
-      :item.script
-        ?`<span class="pill p-green" style="font-size:11px">✓ Written</span>`
-        :`<span style="color:var(--muted);font-size:12px">+ Script</span>`;
-
-    el.innerHTML=`
-      <div class="e-row">
-        <div class="ec"><input type="date" value="${item.date}" onchange="updCal(${ri},'date',this.value)"></div>
-        <div class="ec">
-          <select onchange="updCal(${ri},'account',this.value)">
-            ${S.accounts.map(a=>`<option value="${a}" ${a===item.account?'selected':''}>${a}</option>`).join('')}
-          </select>
-        </div>
-        <div class="ec">
-          <select onchange="updCal(${ri},'type',this.value)">
-            ${['Reel','Carousel','Story'].map(t=>`<option ${t===item.type?'selected':''}>${t}</option>`).join('')}
-          </select>
-        </div>
-        <div class="ec">
-          <select onchange="updCal(${ri},'status',this.value)">
-            ${['Planned','In Progress','Complete','Published'].map(s=>`<option ${s===item.status?'selected':''}>${s}</option>`).join('')}
-          </select>
-        </div>
-        <div class="ec hook-c"><input type="text" value="${item.hook.replace(/"/g,'&quot;')}" placeholder="Topic / hook…" onblur="updCal(${ri},'hook',this.value)"></div>
-        <div class="ec" style="cursor:pointer" onclick="toggleScript(${item.id})">${sprev}</div>
-        <div class="ec"><input type="checkbox" class="chk" ${item.done?'checked':''} onchange="toggleDone(${ri})"></div>
-      </div>
-      <button class="e-expander" id="ebtn-${item.id}" onclick="toggleScript(${item.id})">
-        <span>📝 Script ${item.script?'(written)':''} ${item.scriptLink?'• link added':''}</span>
-        <span class="arr">▾</span>
-      </button>
-      <div class="script-panel" id="sp-${item.id}">
-        <div>
-          <div class="sp-lbl">Write Script</div>
-          <textarea class="sp-ta" placeholder="Write your full reel/post script here…" onblur="updCal(${ri},'script',this.value)">${item.script||''}</textarea>
-        </div>
-        <div>
-          <div class="sp-lbl">Script Link (Google Doc / Notion / Drive)</div>
-          <div class="sp-link-row">
-            <input class="sp-link-input" type="text" value="${item.scriptLink||''}" placeholder="https://…" onblur="updCal(${ri},'scriptLink',this.value)">
-            ${item.scriptLink?`<a href="${item.scriptLink}" target="_blank" class="btn btn-o btn-xs">Open ↗</a>`:''}
-          </div>
-        </div>
-        <div class="sp-foot">
-          <button class="btn-del" onclick="delEntry(${ri})">🗑 Delete entry</button>
-        </div>
-      </div>
-    `;
-    wrap.appendChild(el);
-  });
-
-  // progress
-  const total=S.cal.length;
-  const done=S.cal.filter(i=>i.done).length;
-  const pct=total?Math.round(done/total*100):0;
-  document.getElementById('progFill').style.width=pct+'%';
-  document.getElementById('progTxt').textContent=`${done} / ${total} done`;
-  renderStats();
-}
-
-function toggleScript(id){
-  document.getElementById('sp-'+id).classList.toggle('open');
-  document.getElementById('ebtn-'+id).classList.toggle('open');
-}
-
-function updCal(ri,key,val){
-  S.cal[ri][key]=val;
-  if(key==='status'&&val==='Published')S.cal[ri].done=true;
-  save();
-  if(['date','status','done','scriptLink','script'].includes(key))renderCal();
-  else renderStats();
-  toast('Saved!');
-}
-
-function toggleDone(ri){
-  S.cal[ri].done=!S.cal[ri].done;
-  if(S.cal[ri].done&&S.cal[ri].status!=='Published')S.cal[ri].status='Complete';
-  save();renderCal();
-}
-
-function delEntry(ri){
-  if(!confirm('Delete this entry?'))return;
-  S.cal.splice(ri,1);save();renderCal();toast('Deleted');
-}
-
-// ── modal ─────────────────────────────────────
-function openModal(){
-  syncAccDropdowns();
-  document.getElementById('mDate').value=fmt(today);
-  document.getElementById('modal').classList.add('open');
-  setTimeout(()=>document.getElementById('mTopic').focus(),80);
-}
-function closeModal(){document.getElementById('modal').classList.remove('open')}
-function submitAdd(){
-  const topic=document.getElementById('mTopic').value.trim();
-  if(!topic){alert('Enter a topic!');return}
-  S.cal.push({
-    id:Date.now(),
-    date:document.getElementById('mDate').value||fmt(today),
-    account:document.getElementById('mAcc').value||S.accounts[0]||'@fiwe.social',
-    type:document.getElementById('mType').value,
-    hook:topic,
-    status:document.getElementById('mStat').value,
-    done:false,script:'',scriptLink:''
-  });
-  save();renderCal();closeModal();
-  document.getElementById('mTopic').value='';
-  toast('Entry added! ✅');
-}
-
-// ── influencers ───────────────────────────────
-function renderInf(){
-  const tbody=document.getElementById('infBody');
-  const empty=document.getElementById('infEmpty');
-  if(!S.inf.length){tbody.innerHTML='';empty.style.display='block';return}
-  empty.style.display='none';
-  tbody.innerHTML=S.inf.map((inf,i)=>`
-    <tr>
-      <td><input class="t-inp" type="text" value="${inf.name}" onblur="updInf(${i},'name',this.value)" style="min-width:80px"></td>
-      <td style="color:var(--accent)"><input class="t-inp" type="text" value="${inf.instaId||''}" placeholder="@handle" onblur="updInf(${i},'instaId',this.value)" style="color:var(--accent);min-width:100px"></td>
-      <td><input class="t-inp" type="text" value="${inf.niche}" onblur="updInf(${i},'niche',this.value)" style="min-width:70px"></td>
-      <td><input class="t-inp" type="text" value="${inf.followers}" onblur="updInf(${i},'followers',this.value)" style="min-width:45px"></td>
-      <td>
-        ${inf.reelLink?`<a href="${inf.reelLink}" target="_blank" class="pill p-blue" style="margin-bottom:3px;display:inline-flex">🔗 View</a><br>`:''}
-        <input class="t-inp" type="text" value="${inf.reelLink||''}" placeholder="Paste reel URL" onblur="updInf(${i},'reelLink',this.value)" style="font-size:11px;color:var(--muted);min-width:100px">
-      </td>
-      <td style="font-weight:600">₹<input class="t-inp" type="number" value="${inf.price}" onblur="updInf(${i},'price',parseFloat(this.value)||0)" style="width:68px;font-weight:600"></td>
-      <td>
-        <select class="t-sel" onchange="updInf(${i},'status',this.value)">
-          ${['Contacted','Agreed','Content Received','Posted'].map(s=>`<option ${s===inf.status?'selected':''}>${s}</option>`).join('')}
-        </select>
-      </td>
-      <td style="font-weight:600;color:var(--green)">
-        <input class="t-inp" type="number" value="${inf.downloads}" onblur="updInf(${i},'downloads',parseInt(this.value)||0)" style="width:55px;font-weight:600;color:var(--green)">
-      </td>
-      <td><button class="btn-del" onclick="delInf(${i})">✕</button></td>
-    </tr>
-  `).join('');
-  document.getElementById('totalSpent').textContent='₹'+S.inf.reduce((s,i)=>s+i.price,0).toLocaleString();
-  renderStats();
-}
-function updInf(i,k,v){S.inf[i][k]=v;save();renderInf();toast('Saved!')}
-function addInf(){S.inf.push({id:Date.now(),name:'New',instaId:'@handle',niche:'',followers:'0k',reelLink:'',price:0,status:'Contacted',downloads:0});save();renderInf();toast('Added!')}
-function delInf(i){if(!confirm('Delete?'))return;S.inf.splice(i,1);save();renderInf();toast('Deleted')}
-
-// ── carousels ─────────────────────────────────
-function renderCar(){
-  document.getElementById('carGrid').innerHTML=S.car.map((c,i)=>`
-    <div class="car-item">
-      <input class="car-title" type="text" value="${c.title}" onblur="updCar(${i},'title',this.value)">
-      <div class="car-row">
-        <span style="font-size:12px;color:var(--muted)">${c.slides} slides</span>
-        <select class="f-sel" style="font-size:12px;padding:4px 8px" onchange="updCar(${i},'status',this.value)">
-          ${['Not Started','Designing','Complete'].map(s=>`<option ${s===c.status?'selected':''}>${s}</option>`).join('')}
-        </select>
-      </div>
-      <input class="car-link-inp" type="text" value="${c.link||''}" placeholder="Canva / Drive link…" onblur="updCar(${i},'link',this.value)">
-      ${c.link?`<a href="${c.link}" target="_blank" style="font-size:12px;color:var(--accent);display:block;margin-top:4px">Open ↗</a>`:''}
-      <div class="m-pair">
-        <div class="m-box"><label>Saves</label><input type="number" value="${c.saves}" onblur="updCar(${i},'saves',parseInt(this.value)||0)"></div>
-        <div class="m-box"><label>Shares</label><input type="number" value="${c.shares}" onblur="updCar(${i},'shares',parseInt(this.value)||0)"></div>
-      </div>
-    </div>
-  `).join('');
-}
-function updCar(i,k,v){S.car[i][k]=v;save();renderCar();toast('Saved!')}
-
-// ── notes ─────────────────────────────────────
-function pickSw(el){document.querySelectorAll('.sw').forEach(s=>s.classList.remove('on'));el.classList.add('on');noteColor=el.dataset.c}
-function addNote(){
-  const t=document.getElementById('noteInp').value.trim();
-  if(!t)return;
-  S.notes.push({id:Date.now(),text:t,color:noteColor,date:new Date().toLocaleDateString('en-IN')});
-  save();renderNotes();document.getElementById('noteInp').value='';toast('Note pinned! 📌');
-}
-function delNote(id){S.notes=S.notes.filter(n=>n.id!==id);save();renderNotes()}
-function updNote(id,v){const n=S.notes.find(n=>n.id===id);if(n)n.text=v;save()}
-function renderNotes(){
-  const grid=document.getElementById('notesGrid');
-  const empty=document.getElementById('notesEmpty');
-  document.getElementById('noteCnt').textContent=S.notes.length+' note'+(S.notes.length!==1?'s':'');
-  if(!S.notes.length){grid.innerHTML='';empty.style.display='block';return}
-  empty.style.display='none';
-  grid.innerHTML=S.notes.map(n=>`
-    <div class="note n-${n.color}">
-      <div class="note-d">${n.date}</div>
-      <textarea rows="4" onblur="updNote(${n.id},this.value)">${n.text}</textarea>
-      <div class="note-foot"><button class="note-del" onclick="delNote(${n.id})">✕ Remove</button></div>
-    </div>
-  `).join('');
-}
-
-// ── keyboard ──────────────────────────────────
-window.addEventListener('keydown',e=>{
-  if(e.ctrlKey&&e.key==='s'){e.preventDefault();save();toast('Force saved! 💾')}
-  if(e.key==='Escape')closeModal();
-  if(e.ctrlKey&&e.key==='f'){e.preventDefault();document.getElementById('gSearch').focus()}
-});
-document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal()});
-document.getElementById('gSearch').addEventListener('input',renderCal);
-document.getElementById('accInput').addEventListener('keydown',e=>{if(e.key==='Enter')addAcc()});
-document.getElementById('noteInp').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))addNote()});
-
-// ── init ──────────────────────────────────────
-renderAccounts();
-renderCal();
-renderInf();
-renderCar();
-renderNotes();
-renderStats();
+    // Auto-play (optional)
+    // setInterval(nextSlide, 5000);
 </script>
+
 </body>
 </html>
